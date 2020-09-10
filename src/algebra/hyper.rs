@@ -53,6 +53,16 @@ impl<X: Group> Group for Hyper<X> {
         Hyper::Real(X::zero())
     }
 }
+impl<X: Group> std::ops::Add<X> for Hyper<X> {
+    type Output = Self;
+    fn add(self, other: X) -> Self {
+        match self {
+            Inf => Inf,
+            NegInf => NegInf,
+            Real(x) => Real(x + other),
+        }
+    }
+}
 
 #[cfg(test)]
 mod test_hyper {
@@ -65,5 +75,6 @@ mod test_hyper {
         assert!(Hyper::NegInf < Hyper::Real(1));
         assert!(Hyper::Real(0) < Hyper::Inf);
         assert!(Hyper::<i32>::NegInf < Hyper::Inf);
+        assert_eq!(Hyper::Real(1) + 3, Hyper::Real(4));
     }
 }

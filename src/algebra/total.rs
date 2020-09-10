@@ -1,4 +1,4 @@
-/// Algebra - Totalize PartialOrd
+/// Algebra - Totalize PartialOrd Things
 /// Thanks to: https://qiita.com/hatoo@github/items/fa14ad36a1b568d14f3e
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct Total<T>(T);

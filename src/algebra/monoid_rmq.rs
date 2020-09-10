@@ -1,4 +1,4 @@
-// Algebra - RMQ Monoid
+/// Algebra - RMQ Monoid
 use crate::algebra::monoid::*;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 enum MaxInt<X> {

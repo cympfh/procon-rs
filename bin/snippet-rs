@@ -1,0 +1,100 @@
+#!/bin/bash
+
+usage() {
+  cat <<EOM
+SYNOPSIS
+  bin/snippet-rs --ref <REFERENCE_FILE>
+EOM
+  exit
+}
+
+sanity_check() {
+  err=0
+  for dep in peco; do
+    if ! which $dep >/dev/null; then
+      echo "Please install $dep"
+      err=1
+    fi
+  done
+  if [ $err = 1 ]; then
+    exit 1
+  fi
+}
+
+delete_test() {
+  awk 'BEGIN{ok=1} /#\[cfg\(test\)\]/{ ok = 0 } ok'
+}
+
+BASEDIR=$(dirname $0)/../src/
+REF=/dev/null
+IMPORTNGS=$(mktemp)
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --ref )
+      REF=$2
+      shift 2
+      ;;
+    --help | -h )
+      usage
+      ;;
+  esac
+done
+
+list() {
+  for f in $(find $BASEDIR -type f -name '*.rs' | grep -v '/lib.rs' | grep -v '/mod.rs'); do
+    FNAME="$(
+      echo $f | sed "s#$BASEDIR##g" | sed 's/\.rs//g'
+    )"
+    HEAD="$(head -1 $BASEDIR/$FNAME.rs)"
+    case "$HEAD" in
+      ///* )
+        printf "%-23s %s\n" "$FNAME" "$HEAD"
+        ;;
+      * )
+        printf "%s\n" "$FNAME"
+        ;;
+    esac
+  done |
+    sort
+}
+
+import() {
+
+  # skip if already imported
+  if grep "$1" "$REF" "$IMPORTNGS" > /dev/null; then
+    return
+  fi
+
+  # start import
+  echo "// @$1"
+  echo "$1" >> $IMPORTNGS
+
+  # import another files
+  cat "${BASEDIR}${1}.rs" |
+    delete_test |
+    while read line; do
+    case "$line" in
+      "use crate::"* )
+        import "$(echo $line | sed 's/use crate:://g; s/::\*//g; s/::/\//g; s/;$//g')"
+        ;;
+    esac
+  done
+
+  # show body
+  cat "${BASEDIR}${1}.rs" |
+    sed '/^\/\/\//d' |
+    sed '/^use crate.*/d' |
+    awk 'NR>1 || /^./' |
+    delete_test
+
+  echo
+}
+
+SELECT="$(list | peco | sed 's/ .*//g')"
+if [ -z "$SELECT" ]; then
+  exit
+fi
+
+import "${SELECT}"
+rm ${IMPORTNGS}

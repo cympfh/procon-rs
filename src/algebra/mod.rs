@@ -1,3 +1,10 @@
+mod act;
+mod act_assign;
+mod complex;
 mod group;
 mod hyper;
+mod monoid;
+mod monoid_rmq;
+mod ratio;
 mod ring;
+mod total;

@@ -61,5 +61,9 @@ mod test_hyper {
     fn it_works() {
         assert_eq!(Hyper::<i32>::zero(), Hyper::Real(0));
         assert_eq!(Hyper::Real(42).unwrap(), 42);
+        assert!(Hyper::Real(0_i32) < Hyper::Real(1));
+        assert!(Hyper::NegInf < Hyper::Real(1));
+        assert!(Hyper::Real(0) < Hyper::Inf);
+        assert!(Hyper::<i32>::NegInf < Hyper::Inf);
     }
 }

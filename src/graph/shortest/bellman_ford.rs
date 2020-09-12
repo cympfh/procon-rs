@@ -5,7 +5,7 @@ use crate::algebra::hyper::*;
 pub fn bellman_ford<X: Copy + Group + PartialOrd>(
     s: usize,
     t: usize,
-    neigh: &[Vec<(usize, Hyper<X>)>],
+    neigh: &[Vec<(usize, X)>],
 ) -> Hyper<X> {
     use Hyper::*;
     let n = neigh.len();
@@ -18,9 +18,9 @@ pub fn bellman_ford<X: Copy + Group + PartialOrd>(
         for u in 0..n {
             for &(v, cost) in neigh[u].iter() {
                 if u <= v {
-                    edges_f.push((u, v, cost));
+                    edges_f.push((u, v, Real(cost)));
                 } else {
-                    edges_b.push((u, v, cost));
+                    edges_b.push((u, v, Real(cost)));
                 }
             }
         }
@@ -61,10 +61,10 @@ mod test_bellman_ford {
     #[test]
     fn test_cycle_contains_negative_edge() {
         let neigh = vec![
-            vec![(1, Real(1)), (3, Real(-1))],
-            vec![(0, Real(1)), (2, Real(1))],
-            vec![(1, Real(1)), (3, Real(1))],
-            vec![(2, Real(1))],
+            vec![(1, 1), (3, -1)],
+            vec![(0, 1), (2, 1)],
+            vec![(1, 1), (3, 1)],
+            vec![(2, 1)],
         ];
         assert_eq!(bellman_ford(0, 1, &neigh), Real(1));
         assert_eq!(bellman_ford(0, 2, &neigh), Real(0));
@@ -74,11 +74,7 @@ mod test_bellman_ford {
 
     #[test]
     fn test_contains_negative_cycle() {
-        let neigh = vec![
-            vec![(1, Real(-1))],
-            vec![(0, Real(-1)), (2, Real(1))],
-            vec![(1, Real(1))],
-        ];
+        let neigh = vec![vec![(1, -1)], vec![(0, -1), (2, 1)], vec![(1, 1)]];
         assert_eq!(bellman_ford(0, 1, &neigh), NegInf);
         assert_eq!(bellman_ford(0, 2, &neigh), NegInf);
     }

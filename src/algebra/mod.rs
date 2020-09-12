@@ -3,6 +3,7 @@ pub mod act_assign;
 pub mod complex;
 pub mod group;
 pub mod hyper;
+pub mod modint;
 pub mod monoid;
 pub mod monoid_rmq;
 pub mod ratio;

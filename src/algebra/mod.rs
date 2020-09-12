@@ -5,7 +5,7 @@ pub mod group;
 pub mod hyper;
 pub mod modint;
 pub mod monoid;
-pub mod monoid_rmq;
+pub mod monoid_minmax;
 pub mod ratio;
 pub mod ring;
 pub mod total;

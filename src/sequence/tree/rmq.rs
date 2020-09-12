@@ -1,5 +1,5 @@
 /// Sequence - Range Maximum/Minimum Query
-use crate::algebra::monoid_rmq::*;
+use crate::algebra::monoid_minmax::*;
 use crate::sequence::tree::segment_tree::*;
 
 pub type RMaxQ<X> = SegmentTree<MaxInt<X>>;

@@ -1,4 +1,4 @@
-/// Algebra - RMQ Monoid
+/// Algebra - Monoid - MinInt, MaxInt
 use crate::algebra::monoid::*;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum MaxInt<X> {
@@ -62,7 +62,7 @@ impl<X: Ord + Copy> Monoid for MinInt<X> {
 
 #[cfg(test)]
 mod test_monoid_rmq {
-    use crate::algebra::monoid_rmq::*;
+    use crate::algebra::monoid_minmax::*;
     #[test]
     fn test_max() {
         assert_eq!(MaxInt::Val(2).unwrap(), 2);

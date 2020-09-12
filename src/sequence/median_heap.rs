@@ -1,6 +1,6 @@
 /// Sequence - Median Heap
 #[derive(Debug)]
-struct MedianHeap<T>
+pub struct MedianHeap<T>
 where
     T: Ord + Copy,
 {
@@ -8,22 +8,22 @@ where
     tail: std::collections::BinaryHeap<std::cmp::Reverse<T>>,
 }
 #[derive(Debug, PartialEq, Eq)]
-enum Median<T> {
+pub enum Median<T> {
     None,
     Just(T),
     Between(T, T),
 }
 impl<T: Ord + Copy> MedianHeap<T> {
-    fn new() -> MedianHeap<T> {
+    pub fn new() -> MedianHeap<T> {
         MedianHeap {
             head: std::collections::BinaryHeap::new(),
             tail: std::collections::BinaryHeap::new(),
         }
     }
-    fn len(&self) -> usize {
+    pub fn len(&self) -> usize {
         (self.head.len() + self.tail.len()) / 2
     }
-    fn push(&mut self, x: T) {
+    pub fn push(&mut self, x: T) {
         match (self.head.peek(), self.tail.peek()) {
             (None, None) => {
                 self.head.push(x);
@@ -48,7 +48,7 @@ impl<T: Ord + Copy> MedianHeap<T> {
             _ => {}
         }
     }
-    fn peek(&self) -> Median<T> {
+    pub fn peek(&self) -> Median<T> {
         let n = self.len();
         if n == 0 {
             Median::None
@@ -60,7 +60,7 @@ impl<T: Ord + Copy> MedianHeap<T> {
             Median::Between(*a, b)
         }
     }
-    fn pop(&mut self) -> Median<T> {
+    pub fn pop(&mut self) -> Median<T> {
         let n = self.len();
         if n == 0 {
             Median::None

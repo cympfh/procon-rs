@@ -1,2 +1,2 @@
-mod kruskal;
-mod prim;
+pub mod kruskal;
+pub mod prim;

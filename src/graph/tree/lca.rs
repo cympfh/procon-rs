@@ -1,11 +1,11 @@
 /// Graph - Tree - Lowest Common Ancestor (LCA)
-struct LCA {
+pub struct LCA {
     depth: Vec<usize>,
     parent: Vec<Vec<Option<usize>>>,
 }
 impl LCA {
     /// Directed(Parent -> Child)
-    fn new(tree: &Vec<Vec<usize>>, root: usize) -> Self {
+    pub fn new(tree: &Vec<Vec<usize>>, root: usize) -> Self {
         let n = tree.len();
         let log2n = (0..n).map(|i| n >> i).take_while(|&x| x > 0).count();
         let mut parent = vec![vec![None; log2n]; n];
@@ -39,7 +39,7 @@ impl LCA {
             parent: parent,
         }
     }
-    fn get(&self, u: usize, v: usize) -> usize {
+    pub fn get(&self, u: usize, v: usize) -> usize {
         if self.depth[u] > self.depth[v] {
             return self.get(v, u);
         }

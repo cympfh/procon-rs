@@ -2,7 +2,7 @@
 use crate::algebra::group::*;
 use crate::algebra::hyper::*;
 
-struct Dinic;
+pub struct Dinic;
 impl Dinic {
     pub fn flow<X: Copy + Eq + Ord + Group>(
         s: usize,

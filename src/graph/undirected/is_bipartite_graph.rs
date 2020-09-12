@@ -1,7 +1,7 @@
 /// Graph - Undirected - is Bipartite Graph?
 use crate::set::union_find::*;
 
-fn is_bipartite_graph(neigh: &[Vec<usize>]) -> bool {
+pub fn is_bipartite_graph(neigh: &[Vec<usize>]) -> bool {
     let n = neigh.len();
     let mut uf = UnionFind::new(n * 2);
     for u in 0..n {

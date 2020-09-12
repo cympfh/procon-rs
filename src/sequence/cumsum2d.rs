@@ -2,9 +2,9 @@
 use crate::algebra::group::*;
 
 #[derive(Debug)]
-struct Cumsum2d<T>(Vec<Vec<T>>);
+pub struct Cumsum2d<T>(Vec<Vec<T>>);
 impl<T: Copy + Group> Cumsum2d<T> {
-    fn new(data: &Vec<Vec<T>>) -> Self {
+    pub fn new(data: &Vec<Vec<T>>) -> Self {
         let h = data.len();
         let w = data[0].len();
         let mut cs = vec![vec![T::zero(); w + 1]; h + 1];
@@ -20,7 +20,7 @@ impl<T: Copy + Group> Cumsum2d<T> {
         let y = std::cmp::min(y, self.0[0].len());
         self.0[x][y]
     }
-    fn sum(&self, xrange: std::ops::Range<usize>, yrange: std::ops::Range<usize>) -> T {
+    pub fn sum(&self, xrange: std::ops::Range<usize>, yrange: std::ops::Range<usize>) -> T {
         if xrange.end <= xrange.start || yrange.end <= yrange.start {
             T::zero()
         } else {

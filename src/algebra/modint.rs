@@ -1,9 +1,9 @@
 /// Algebra - ModInt (Zp)
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
-struct ModInt(i64, i64); // (residual, modulo)
+pub struct ModInt(i64, i64); // (residual, modulo)
 impl ModInt {
-    fn new(residual: i64, modulo: i64) -> ModInt {
+    pub fn new(residual: i64, modulo: i64) -> ModInt {
         if residual >= modulo {
             ModInt(residual % modulo, modulo)
         } else if residual < 0 {
@@ -12,10 +12,10 @@ impl ModInt {
             ModInt(residual, modulo)
         }
     }
-    fn unwrap(self) -> i64 {
+    pub fn unwrap(self) -> i64 {
         self.0
     }
-    fn inv(self) -> Self {
+    pub fn inv(self) -> Self {
         fn exgcd(r0: i64, a0: i64, b0: i64, r: i64, a: i64, b: i64) -> (i64, i64, i64) {
             if r > 0 {
                 exgcd(r, a, b, r0 % r, a0 - r0 / r * a, b0 - r0 / r * b)
@@ -29,7 +29,7 @@ impl ModInt {
         }
         ModInt(((a % self.1) + self.1) % self.1, self.1)
     }
-    fn pow(self, n: i64) -> Self {
+    pub fn pow(self, n: i64) -> Self {
         if n < 0 {
             self.pow(-n).inv()
         } else if n == 0 {

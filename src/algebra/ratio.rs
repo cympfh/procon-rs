@@ -3,18 +3,18 @@ use crate::algebra::group::*;
 use crate::algebra::ring::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-struct Ratio(i64, i64); // Normalized (numerator / denominator)
+pub struct Ratio(i64, i64); // Normalized (numerator / denominator)
 
 impl Ratio {
-    fn new(a: i64, b: i64) -> Self {
+    pub fn new(a: i64, b: i64) -> Self {
         let x = Self::gcd(a.abs(), b.abs());
         let sign = if b > 0 { 1 } else { -1 };
         Ratio(sign * a / x, sign * b / x)
     }
-    fn from(x: i64) -> Self {
+    pub fn from(x: i64) -> Self {
         Ratio(x, 1)
     }
-    fn inv(&self) -> Self {
+    pub fn inv(&self) -> Self {
         if self.0 > 0 {
             Ratio(self.1, self.0)
         } else if self.0 < 0 {

@@ -5,7 +5,7 @@
 ///     neigh is a neigh list of DiGraph
 ///     cmp is mapping vector; cmp[DiGraph-Vertex-Index] = DAG-Vertex-Index
 ///     dag is a neigh list of DAG
-fn scc(neigh: &Vec<Vec<usize>>) -> (Vec<usize>, Vec<Vec<usize>>) {
+pub fn scc(neigh: &Vec<Vec<usize>>) -> (Vec<usize>, Vec<Vec<usize>>) {
     let n = neigh.len();
 
     // Post-order traversal
@@ -98,7 +98,7 @@ mod test_scc {
     #[test]
     fn it_connected() {
         let neigh = vec![vec![1], vec![0, 2], vec![1, 3], vec![2]];
-        let (cmp, dag) = scc(&neigh);
+        let (cmp, _dag) = scc(&neigh);
         assert_eq!(cmp, vec![0, 0, 0, 0]);
     }
 }

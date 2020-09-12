@@ -1,5 +1,5 @@
 /// Graph - Tree - Diameter
-fn diameter(tree: &Vec<Vec<usize>>) -> usize {
+pub fn diameter(tree: &Vec<Vec<usize>>) -> usize {
     use std::cmp::Reverse;
     let n = tree.len();
     let mut s = 0;

@@ -1,2 +1,2 @@
-mod diameter;
-mod lca;
+pub mod diameter;
+pub mod lca;

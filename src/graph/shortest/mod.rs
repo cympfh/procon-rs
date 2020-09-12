@@ -1,3 +1,3 @@
-mod bellman_ford;
-mod dijkstra;
-mod warshall_floyd;
+pub mod bellman_ford;
+pub mod dijkstra;
+pub mod warshall_floyd;

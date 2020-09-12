@@ -1,6 +1,6 @@
 /// Graph - Directed - Topological Sort
 
-struct Topological;
+pub struct Topological;
 
 impl Topological {
     pub fn sort(neigh: &Vec<Vec<usize>>) -> Vec<usize> {

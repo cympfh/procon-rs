@@ -3,7 +3,7 @@
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct Total<T>(T);
 impl<T> Total<T> {
-    fn unwrap(self) -> T {
+    pub fn unwrap(self) -> T {
         self.0
     }
 }

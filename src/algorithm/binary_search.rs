@@ -63,7 +63,7 @@ mod test_binary_search {
 
     #[test]
     fn search_bound() {
-        let v: Vec<usize> = (0..100).collect();
+        let v: Vec<i32> = (0..100).collect();
         assert_eq!(binsearch(0..100, &|i| v[i] > 50), 51);
         assert_eq!(binsearch(0..100, &|i| v[i] >= 0), 0);
         assert_eq!(binsearch(0..100, &|i| v[i] > 100), 100);

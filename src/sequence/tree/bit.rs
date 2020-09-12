@@ -1,18 +1,18 @@
 /// Sequence - Binary Indexed Tree (Fenwick Tree)
 use crate::algebra::group::*;
 
-struct BIT<X> {
+pub struct BIT<X> {
     size: usize,
     array: Vec<X>,
 }
 impl<X: Copy + Group> BIT<X> {
-    fn new(n: usize) -> Self {
+    pub fn new(n: usize) -> Self {
         BIT {
             size: n,
             array: vec![X::zero(); n + 1],
         }
     }
-    fn add(&mut self, idx: usize, w: X) {
+    pub fn add(&mut self, idx: usize, w: X) {
         let mut x = idx + 1;
         while x <= self.size {
             self.array[x] = self.array[x] + w;
@@ -32,7 +32,7 @@ impl<X: Copy + Group> BIT<X> {
         sum
     }
     /// sum of [left, right)
-    fn sum(&self, range: std::ops::Range<usize>) -> X {
+    pub fn sum(&self, range: std::ops::Range<usize>) -> X {
         if range.end <= range.start {
             return X::zero();
         }

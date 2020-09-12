@@ -1,2 +1,2 @@
-mod diameter;
-mod is_bipartite_graph;
+pub mod diameter;
+pub mod is_bipartite_graph;

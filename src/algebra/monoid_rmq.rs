@@ -6,7 +6,7 @@ pub enum MaxInt<X> {
     Val(X),
 }
 impl<X> MaxInt<X> {
-    fn unwrap(self) -> X {
+    pub fn unwrap(self) -> X {
         if let Self::Val(x) = self {
             x
         } else {
@@ -36,7 +36,7 @@ pub enum MinInt<X> {
     Maximal,
 }
 impl<X> MinInt<X> {
-    fn unwrap(self) -> X {
+    pub fn unwrap(self) -> X {
         if let Self::Val(x) = self {
             x
         } else {

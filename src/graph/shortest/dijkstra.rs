@@ -2,7 +2,7 @@
 use crate::algebra::group::*;
 use crate::algebra::hyper::*;
 
-fn dijkstra<Cost: Copy + Group + Ord>(
+pub fn dijkstra<Cost: Copy + Group + Ord>(
     s: usize,
     neigh: &Vec<Vec<(usize, Cost)>>,
 ) -> Vec<Hyper<Cost>> {

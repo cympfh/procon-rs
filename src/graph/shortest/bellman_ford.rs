@@ -2,7 +2,7 @@
 use crate::algebra::group::*;
 use crate::algebra::hyper::*;
 
-fn bellman_ford<X: Copy + Group + PartialOrd>(
+pub fn bellman_ford<X: Copy + Group + PartialOrd>(
     s: usize,
     t: usize,
     neigh: &[Vec<(usize, Hyper<X>)>],

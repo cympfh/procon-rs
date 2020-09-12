@@ -72,7 +72,7 @@ impl<X: Copy + Monoid> SegmentTree<X> {
     }
 }
 impl<X: std::fmt::Debug> SegmentTree<X> {
-    fn debug(&self) {
+    pub fn debug(&self) {
         for i in 0..self.size {
             if i > 0 && (i + 1).count_ones() == 1 {
                 eprintln!();
@@ -89,7 +89,7 @@ mod test_rmq {
 
     #[test]
     fn sum() {
-        let mut v = vec![1, 2, 3, 4];
+        let v = vec![1, 2, 3, 4];
         let mut st = SegmentTree::from(v.iter().map(|&x| Sum(x)).collect());
         assert_eq!(st.product(0..0), Sum(0));
         assert_eq!(st.product(0..1), Sum(1));

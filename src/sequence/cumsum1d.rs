@@ -2,9 +2,9 @@
 use crate::algebra::group::*;
 
 #[derive(Debug)]
-struct Cumsum1d<T>(Vec<T>);
+pub struct Cumsum1d<T>(Vec<T>);
 impl<T: Copy + Group> Cumsum1d<T> {
-    fn new(xs: &Vec<T>) -> Self {
+    pub fn new(xs: &Vec<T>) -> Self {
         let mut ac = T::zero();
         let mut arr = vec![T::zero(); xs.len()];
         for i in 0..arr.len() {
@@ -22,7 +22,7 @@ impl<T: Copy + Group> Cumsum1d<T> {
         }
     }
     /// sum(i..j) = sum of [i, j)
-    fn sum(&self, range: std::ops::Range<usize>) -> T {
+    pub fn sum(&self, range: std::ops::Range<usize>) -> T {
         if range.start >= range.end {
             T::zero()
         } else {

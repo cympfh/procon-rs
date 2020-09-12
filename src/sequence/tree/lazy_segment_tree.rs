@@ -90,10 +90,10 @@ impl<X: Copy + Monoid, M: Copy + Monoid + Act<X>> LazySegmentTree<X, M> {
     pub fn product(&mut self, range: std::ops::Range<usize>) -> X {
         self.product_sub(range, 0, 0..self.length_upper)
     }
-    fn index(&mut self, i: usize) -> X {
+    pub fn index(&mut self, i: usize) -> X {
         self.product(i..i + 1)
     }
-    fn to_vec(&mut self) -> Vec<X> {
+    pub fn to_vec(&mut self) -> Vec<X> {
         (0..self.length).map(|i| self.index(i)).collect()
     }
 }

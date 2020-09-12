@@ -1,5 +1,5 @@
 /// Graph - Undirected - Diameter
-fn diameter(neigh: &Vec<Vec<usize>>) -> usize {
+pub fn diameter(neigh: &Vec<Vec<usize>>) -> usize {
     let n = neigh.len();
     let mut d = vec![vec![n * 2 + 1; n]; n];
     for i in 0..n {

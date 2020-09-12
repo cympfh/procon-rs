@@ -2,22 +2,22 @@
 use crate::algebra::ring::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct Complex<X>(X, X);
+pub struct Complex<X>(X, X);
 
 impl<X: Ring + Copy> Complex<X> {
-    fn zero() -> Complex<X> {
+    pub fn zero() -> Complex<X> {
         Complex(X::zero(), X::zero())
     }
-    fn unit() -> Complex<X> {
+    pub fn unit() -> Complex<X> {
         Complex(X::one(), X::zero())
     }
-    fn i() -> Complex<X> {
+    pub fn i() -> Complex<X> {
         Complex(X::zero(), X::one())
     }
-    fn real(&self) -> X {
+    pub fn real(&self) -> X {
         self.0
     }
-    fn imag(&self) -> X {
+    pub fn imag(&self) -> X {
         self.1
     }
     fn scalar_mul(&self, x: X) -> Self {

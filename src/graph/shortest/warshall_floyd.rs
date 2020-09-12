@@ -2,7 +2,7 @@
 use crate::algebra::group::*;
 use crate::algebra::hyper::*;
 
-fn warshall_floyd<X: Copy + Group + PartialOrd>(d: &mut [Vec<Hyper<X>>]) {
+pub fn warshall_floyd<X: Copy + Group + PartialOrd>(d: &mut [Vec<Hyper<X>>]) {
     let n = d.len();
     for i in 0..n {
         d[i][i] = Hyper::<X>::zero();

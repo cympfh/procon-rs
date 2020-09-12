@@ -2,7 +2,7 @@
 use crate::algebra::group::*;
 use crate::set::union_find::*;
 
-fn kruskal<Cost: Copy + Group + Ord>(neigh: &Vec<Vec<(usize, Cost)>>) -> Cost {
+pub fn kruskal<Cost: Copy + Group + Ord>(neigh: &Vec<Vec<(usize, Cost)>>) -> Cost {
     let n = neigh.len();
     let mut total = Cost::zero();
     let mut uf = UnionFind::new(n);

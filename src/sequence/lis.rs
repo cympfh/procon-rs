@@ -1,7 +1,7 @@
 /// Sequence - Longest (Strictly) Increasing Sequence (LIS; Young Tableu Method)
 use crate::algorithm::binary_search::*;
 
-fn lis<X: Copy + Ord + std::fmt::Debug>(xs: &Vec<X>) -> Vec<X> {
+pub fn lis<X: Copy + Ord + std::fmt::Debug>(xs: &Vec<X>) -> Vec<X> {
     if xs.len() <= 1 {
         return xs.clone();
     }

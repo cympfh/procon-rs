@@ -1,66 +1,59 @@
 /// Sequence - Binary Indexed Tree (Fenwick Tree)
-use crate::algebra::monoid::*;
+use crate::algebra::group::*;
 
-struct BIT<T> {
+struct BIT<X> {
     size: usize,
-    array: Vec<T>,
+    array: Vec<X>,
 }
-impl<T: Copy + Monoid> BIT<T> {
-    fn new(n: usize) -> BIT<T> {
+impl<X: Copy + Group> BIT<X> {
+    fn new(n: usize) -> Self {
         BIT {
             size: n,
-            array: vec![T::unit(); n + 1],
+            array: vec![X::zero(); n + 1],
         }
     }
-    fn add(&mut self, idx: usize, w: T) {
+    fn add(&mut self, idx: usize, w: X) {
         let mut x = idx + 1;
         while x <= self.size {
-            self.array[x] = self.array[x] * w;
+            self.array[x] = self.array[x] + w;
             let xi = x as i32;
             x += (xi & -xi) as usize;
         }
     }
     /// sum of [0, idx)
-    fn sum_up(&self, idx: usize) -> T {
-        let mut sum = T::unit();
+    fn sum_up(&self, idx: usize) -> X {
+        let mut sum = X::zero();
         let mut x = idx;
         while x > 0 {
-            sum = sum * self.array[x];
+            sum = sum + self.array[x];
             let xi = x as i32;
             x -= (xi & -xi) as usize;
         }
         sum
     }
+    /// sum of [left, right)
+    fn sum(&self, range: std::ops::Range<usize>) -> X {
+        if range.end <= range.start {
+            return X::zero();
+        }
+        self.sum_up(range.end) - self.sum_up(range.start)
+    }
 }
 
 #[cfg(test)]
 mod test_bit {
-    use crate::algebra::monoid::Sum;
     use crate::sequence::interval_tree::bit::*;
 
     #[test]
     fn sum() {
         let mut bit = BIT::new(10);
         for i in 0..10 {
-            bit.add(i, Sum(i as i64));
+            bit.add(i, i as i64);
         }
         let mut ac = 0;
         for i in 0..11 {
-            assert_eq!(bit.sum_up(i), Sum(ac));
+            assert_eq!(bit.sum_up(i), ac);
             ac = ac + i as i64;
-        }
-    }
-
-    #[test]
-    fn prod() {
-        let mut bit = BIT::new(10);
-        for i in 0..10 {
-            bit.add(i, Prod((i + 1) as i64));
-        }
-        let mut ac = 1;
-        for i in 0..11 {
-            assert_eq!(bit.sum_up(i), Prod(ac));
-            ac = ac * (i + 1) as i64;
         }
     }
 }

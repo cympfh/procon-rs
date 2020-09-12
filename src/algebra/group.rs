@@ -28,6 +28,9 @@ mod test_group {
     #[test]
     fn it_works() {
         assert_eq!(i32::zero(), 0);
-        assert_eq!(i128::zero() + 1, 1);
+        assert_eq!(i32::zero() + 3, 3);
+        assert_eq!(3 + i32::zero(), 3);
+        assert_eq!(1 + 2 + 3, 6);
+        assert_eq!(2 + (-2), i32::zero());
     }
 }

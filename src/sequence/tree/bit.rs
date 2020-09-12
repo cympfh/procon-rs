@@ -42,7 +42,7 @@ impl<X: Copy + Group> BIT<X> {
 
 #[cfg(test)]
 mod test_bit {
-    use crate::sequence::interval_tree::bit::*;
+    use crate::sequence::tree::bit::*;
 
     #[test]
     fn sum() {

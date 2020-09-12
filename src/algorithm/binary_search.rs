@@ -39,7 +39,7 @@ define_integer!(
 );
 
 // the minimum index in range s.t. prop holds
-pub fn binsearch<X: Integer + Copy>(range: std::ops::Range<X>, prop: &Fn(X) -> bool) -> X {
+pub fn binsearch<X: Integer + Copy>(range: std::ops::Range<X>, prop: &dyn Fn(X) -> bool) -> X {
     if prop(range.start) {
         range.start
     } else {

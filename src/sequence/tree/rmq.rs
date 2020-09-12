@@ -1,13 +1,13 @@
 /// Sequence - Range Maximum/Minimum Query
 use crate::algebra::monoid_rmq::*;
-use crate::sequence::interval_tree::segment_tree::*;
+use crate::sequence::tree::segment_tree::*;
 
 pub type RMaxQ<X> = SegmentTree<MaxInt<X>>;
 pub type RMinQ<X> = SegmentTree<MinInt<X>>;
 
 #[cfg(test)]
 mod test_rmq {
-    use crate::sequence::interval_tree::rmq::*;
+    use crate::sequence::tree::rmq::*;
 
     #[test]
     fn from_new() {

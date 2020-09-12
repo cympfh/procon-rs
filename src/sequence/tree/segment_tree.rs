@@ -85,7 +85,7 @@ impl<X: std::fmt::Debug> SegmentTree<X> {
 
 #[cfg(test)]
 mod test_rmq {
-    use crate::sequence::interval_tree::segment_tree::*;
+    use crate::sequence::tree::segment_tree::*;
 
     #[test]
     fn sum() {

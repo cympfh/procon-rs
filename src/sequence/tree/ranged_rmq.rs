@@ -1,14 +1,14 @@
 // Sequence - Lazy Segment Tree - Ranged RMQ
 use crate::algebra::act_assign::*;
 use crate::algebra::monoid_rmq::*;
-use crate::sequence::interval_tree::lazy_segment_tree::*;
+use crate::sequence::tree::lazy_segment_tree::*;
 
 pub type RangedRMaxQ<X> = LazySegmentTree<MaxInt<X>, Assign<MaxInt<X>>>;
 pub type RangedRMinQ<X> = LazySegmentTree<MinInt<X>, Assign<MinInt<X>>>;
 
 #[cfg(test)]
 mod test_ratio {
-    use crate::sequence::interval_tree::ranged_rmq::*;
+    use crate::sequence::tree::ranged_rmq::*;
 
     #[test]
     fn it_works() {

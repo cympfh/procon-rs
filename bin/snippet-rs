@@ -49,7 +49,7 @@ list() {
     HEAD="$(head -1 $BASEDIR/$FNAME.rs)"
     case "$HEAD" in
       ///* )
-        printf "%-23s %s\n" "$FNAME" "$HEAD"
+        printf "%-32s %s\n" "$FNAME" "$HEAD"
         ;;
       * )
         printf "%s\n" "$FNAME"

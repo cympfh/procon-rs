@@ -3,7 +3,7 @@ use crate::algebra::act::*;
 use crate::algebra::monoid::*;
 
 #[derive(Debug, Clone, Copy)]
-enum Assign<X> {
+pub enum Assign<X> {
     Some(X),
     None,
 }

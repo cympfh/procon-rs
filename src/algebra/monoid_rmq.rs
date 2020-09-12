@@ -1,7 +1,7 @@
 /// Algebra - RMQ Monoid
 use crate::algebra::monoid::*;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-enum MaxInt<X> {
+pub enum MaxInt<X> {
     Minimal,
     Val(X),
 }
@@ -31,7 +31,7 @@ impl<X: Ord + Copy> Monoid for MaxInt<X> {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-enum MinInt<X> {
+pub enum MinInt<X> {
     Val(X),
     Maximal,
 }

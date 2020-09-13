@@ -1,27 +1,41 @@
-/// Number - Euler's Phi Function
-pub fn euler_phi(n: i64) -> usize {
-    let mut divs = vec![];
-    {
-        let mut m = n;
-        for k in 2..n {
-            if m % k == 0 {
-                divs.push(k);
+/// Number - Euler's totient function; Phi
+pub fn phi(n: u64) -> u64 {
+    let mut r = n;
+    let mut m = n;
+    for p in 2..=n {
+        if m % p == 0 {
+            while m % p == 0 {
+                m /= p;
             }
-            while m % k == 0 {
-                m /= k;
-            }
+            r -= r / p;
+        }
+        if p * p > n {
+            break;
         }
     }
-    let mut cx: i64 = 0;
-    {
-        let m = divs.len();
-        for b in 1..(1 << m) {
-            let d = (0..m)
-                .filter(|i| b & 1 << i > 0)
-                .fold(1, |ac, i| ac * divs[i]);
-            let popcnt = (0..m).filter(|i| b & 1 << i > 0).collect::<Vec<_>>().len();
-            cx += n / d * if popcnt % 2 == 1 { 1 } else { -1 };
-        }
+    if m > 1 {
+        r -= r / m;
     }
-    (n - cx) as usize
+    r
+}
+
+#[cfg(test)]
+mod test_euler_phi {
+    use crate::num::euler_phi::*;
+
+    #[test]
+    fn test_euler_phi() {
+        let truth = vec![
+            1, 1, 2, 2, 4, 2, 6, 4, 6, 4, 10, 4, 12, 6, 8, 8, 16, 6, 18, 8,
+        ];
+        for i in 0..truth.len() {
+            assert_eq!(phi((i + 1) as u64), truth[i]);
+        }
+
+        assert_eq!(phi(5000), 2000);
+        assert_eq!(phi(79523), 78960);
+        assert_eq!(phi(80000), 32000);
+        assert_eq!(phi(99999), 64800);
+        assert_eq!(phi(100000), 40000);
+    }
 }

@@ -38,6 +38,7 @@ pub fn z_search(text: &str, pattern: &str) -> Option<usize> {
     None
 }
 
+#[cfg(test)]
 mod test_z {
 
     #[test]

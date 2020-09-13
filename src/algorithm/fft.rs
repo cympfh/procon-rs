@@ -1,4 +1,4 @@
-/// Fast Fourier Transform
+/// Algorithm - Fast Fourier Transform
 use crate::algebra::complex::*;
 
 pub struct FFT;

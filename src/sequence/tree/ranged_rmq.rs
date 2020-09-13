@@ -1,4 +1,4 @@
-// Sequence - Lazy Segment Tree - Ranged RMQ
+/// Sequence - Lazy Segment Tree - Ranged RMQ
 use crate::algebra::act_assign::*;
 use crate::algebra::monoid_minmax::*;
 use crate::sequence::tree::lazy_segment_tree::*;

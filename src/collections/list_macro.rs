@@ -1,3 +1,4 @@
+/// List Comprehension Macro
 #[macro_export]
 macro_rules! list {
     ($($t:tt)*) => {{ let mut r = vec![]; list_inner!(r, $($t)*); r }}

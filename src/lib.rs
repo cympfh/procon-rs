@@ -5,3 +5,4 @@ pub mod graph;
 pub mod num;
 pub mod sequence;
 pub mod set;
+pub mod string;

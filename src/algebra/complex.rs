@@ -2,7 +2,7 @@
 use crate::algebra::ring::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Complex<X>(X, X);
+pub struct Complex<X>(pub X, pub X);
 
 impl<X: Ring + Copy> Complex<X> {
     pub fn zero() -> Complex<X> {

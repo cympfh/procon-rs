@@ -1,7 +1,8 @@
 /// Algebra - ModInt (Zp)
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
-pub struct ModInt(i64, i64); // (residual, modulo)
+pub struct ModInt(pub i64, pub i64); // (residual, modulo)
+
 impl ModInt {
     pub fn new(residual: i64, modulo: i64) -> ModInt {
         if residual >= modulo {

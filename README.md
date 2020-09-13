@@ -1,2 +1,7 @@
 # procon-rs
-competitive programming library in Rust
+
+Competitive Programming Library for Rust
+
+## Document
+
+See [cympfh.cc/procon](https://cympfh.cc/procon/).

@@ -62,13 +62,13 @@ list() {
 import() {
 
   # skip if already imported
-  if grep "$1" "$REF" "$IMPORTNGS" > /dev/null; then
+  if grep "@${1}$" "$REF" "$IMPORTNGS" > /dev/null; then
     return
   fi
 
   # start import
   echo "// @$1"
-  echo "$1" >> $IMPORTNGS
+  echo "@$1" >> $IMPORTNGS
 
   # import another files
   cat "${BASEDIR}${1}.rs" |

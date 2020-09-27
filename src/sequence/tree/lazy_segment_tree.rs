@@ -99,6 +99,7 @@ impl<X: Copy + Monoid, M: Copy + Monoid + Act<X>> LazySegmentTree<X, M> {
 }
 impl<X: std::fmt::Debug, M: std::fmt::Debug> LazySegmentTree<X, M> {
     pub fn debug(&self) {
+        #[cfg(debug_assertions)]
         for i in 0..self.size {
             if i > 0 && (i + 1).count_ones() == 1 {
                 eprintln!();

@@ -1,7 +1,9 @@
 /// Algebra - ModInt (Zp)
-
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct ModInt(pub i64, pub i64); // (residual, modulo)
+
+pub const MOD_1000000007: i64 = 1_000_000_007;
+pub const MOD_998244353: i64 = 998_244_353;
 
 impl ModInt {
     pub fn new(residual: i64, modulo: i64) -> ModInt {
@@ -153,7 +155,7 @@ impl std::ops::Div for ModInt {
 impl std::ops::Div<i64> for ModInt {
     type Output = Self;
     fn div(self, other: i64) -> Self {
-        self / ModInt(other, self.1)
+        self / ModInt::new(other, self.1)
     }
 }
 impl std::ops::Div<ModInt> for i64 {
@@ -173,29 +175,54 @@ impl std::ops::DivAssign<i64> for ModInt {
     }
 }
 
+#[macro_export]
+macro_rules! mint {
+    ($x:expr) => {
+        ModInt::new($x, MOD_1000000007)
+    };
+}
+
 #[cfg(test)]
 mod test_modint {
     use crate::algebra::modint::*;
 
-    const MOD: i64 = 10007;
-
     #[test]
     fn it_works() {
-        assert_eq!(ModInt(1, MOD) + ModInt(1, MOD), ModInt(2, MOD));
-        assert_eq!(ModInt(1, MOD) - ModInt(1, MOD), ModInt(0, MOD));
-        assert_eq!((-ModInt(1, MOD)) + ModInt(1, MOD), ModInt(0, MOD));
-        assert_eq!(
-            (ModInt(1, MOD) / ModInt(2, MOD)) * ModInt(2, MOD),
-            ModInt(1, MOD)
-        );
-        {
-            let mut m = ModInt(0, MOD);
-            m -= 1;
-            assert_eq!(m.unwrap(), MOD - 1);
-            m = m * 2 + 2;
-            assert_eq!(m.unwrap(), 0);
-            m /= 2;
-            assert_eq!(m.unwrap(), 0);
-        }
+        assert_eq!(mint!(1) + mint!(1), mint!(2));
+        assert_eq!(mint!(1) + mint!(-1), mint!(0));
+        assert_eq!(mint!(1) - 1, mint!(0));
+        assert_eq!(mint!(1) + mint!(-3), mint!(-2));
+        assert_eq!(mint!(1) - mint!(-3), mint!(4));
+        assert_eq!(mint!(-3) + 1, mint!(-2));
+        assert_eq!(-mint!(1), mint!(-1));
+        assert_eq!(mint!(-1) * 2, mint!(-2));
+        assert_eq!((mint!(1) / -3) * 6, mint!(-2));
+    }
+
+    #[test]
+    fn test_pow() {
+        assert_eq!(mint!(2).pow(10), mint!(1024));
+        assert_eq!(mint!(-2).pow(10), mint!(1024));
+        assert_eq!(mint!(-2).pow(11), mint!(-2048));
+    }
+
+    #[test]
+    fn test_mut() {
+        let mut m = mint!(0);
+
+        m -= 1;
+        assert_eq!(m, mint!(-1));
+        assert_eq!(m.unwrap(), MOD_1000000007 - 1);
+
+        m *= 2;
+        assert_eq!(m, mint!(-2));
+
+        m += 2;
+        assert_eq!(m, mint!(0));
+        assert_eq!(m.unwrap(), 0);
+
+        m += 1;
+        m /= 3; // m = 1/3
+        assert_eq!(m + m + m, mint!(1));
     }
 }

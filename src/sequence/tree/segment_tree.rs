@@ -73,6 +73,7 @@ impl<X: Copy + Monoid> SegmentTree<X> {
 }
 impl<X: std::fmt::Debug> SegmentTree<X> {
     pub fn debug(&self) {
+        #[cfg(debug_assertions)]
         for i in 0..self.size {
             if i > 0 && (i + 1).count_ones() == 1 {
                 eprintln!();

@@ -1,6 +1,9 @@
 /// collections - defaultdict
 #[derive(Debug, Clone)]
-pub struct DefaultDict<K, V> {
+pub struct DefaultDict<K, V>
+where
+    K: Eq + std::hash::Hash,
+{
     data: std::collections::HashMap<K, V>,
     default: V,
 }

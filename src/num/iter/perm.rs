@@ -5,12 +5,26 @@ pub struct Permutation {
 }
 impl Permutation {
     pub fn new(n: usize) -> Permutation {
-        Permutation { n: n, idx: 0 }
+        Permutation { n, idx: 0 }
     }
-}
-impl Iterator for Permutation {
-    type Item = Vec<usize>;
-    fn next(&mut self) -> Option<Vec<usize>> {
+    pub fn from(mut perm: Vec<usize>) -> Permutation {
+        let n = perm.len();
+        let mut idx = 0;
+        let mut fact: usize = (1..n).product();
+        for i in 0..n {
+            if i > 0 {
+                fact /= n - i;
+            }
+            idx += perm[i] * fact;
+            for j in i + 1..n {
+                if perm[j] > perm[i] {
+                    perm[j] -= 1;
+                }
+            }
+        }
+        Permutation { n, idx }
+    }
+    pub fn to_vec(&self) -> Option<Vec<usize>> {
         let mut r = vec![0; self.n];
         let mut idx = self.idx;
         for k in 1..self.n {
@@ -36,8 +50,15 @@ impl Iterator for Permutation {
                 }
             }
         }
+        Some(r)
+    }
+}
+impl Iterator for Permutation {
+    type Item = Vec<usize>;
+    fn next(&mut self) -> Option<Vec<usize>> {
+        let r = self.to_vec();
         self.idx += 1;
-        return Some(r);
+        r
     }
 }
 

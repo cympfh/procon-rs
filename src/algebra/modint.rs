@@ -175,6 +175,18 @@ impl std::ops::DivAssign<i64> for ModInt {
     }
 }
 
+impl std::iter::Sum for ModInt {
+    fn sum<I>(iter: I) -> Self
+    where
+        I: Iterator<Item = ModInt>,
+    {
+        let mut r = mint!(0);
+        for x in iter {
+            r = r + x
+        }
+        r
+    }
+}
 #[macro_export]
 macro_rules! mint {
     ($x:expr) => {

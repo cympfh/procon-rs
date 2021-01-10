@@ -166,7 +166,7 @@ impl std::ops::Div<ModInt> for i64 {
 }
 impl std::ops::DivAssign for ModInt {
     fn div_assign(&mut self, other: ModInt) {
-        self.0 = (self.clone() / other).0;
+        self.0 = (*self / other).0;
     }
 }
 impl std::ops::DivAssign<i64> for ModInt {
@@ -174,7 +174,12 @@ impl std::ops::DivAssign<i64> for ModInt {
         *self /= ModInt(other, self.1);
     }
 }
-
+#[macro_export]
+macro_rules! mint {
+    ($x:expr) => {
+        ModInt::new($x, MOD_1000000007)
+    };
+}
 impl std::iter::Sum for ModInt {
     fn sum<I>(iter: I) -> Self
     where
@@ -186,12 +191,6 @@ impl std::iter::Sum for ModInt {
         }
         r
     }
-}
-#[macro_export]
-macro_rules! mint {
-    ($x:expr) => {
-        ModInt::new($x, MOD_1000000007)
-    };
 }
 
 #[cfg(test)]

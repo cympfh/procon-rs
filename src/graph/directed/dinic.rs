@@ -2,120 +2,109 @@
 use crate::algebra::group::*;
 use crate::algebra::hyper::*;
 
-pub struct Dinic;
-impl Dinic {
-    pub fn flow<X: Copy + Eq + Ord + Group>(
-        s: usize,
-        t: usize,
-        neigh: &Vec<Vec<(usize, X)>>,
-    ) -> Hyper<X> {
-        use Hyper::*;
-        let n = neigh.len();
-        let mut cap = vec![vec![Real(X::zero()); n]; n];
-        let mut flw = vec![vec![Real(X::zero()); n]; n];
-        for u in 0..n {
-            for &(v, cost) in neigh[u].iter() {
-                cap[u][v] = Real(cost);
+pub struct Dinic<X> {
+    size: usize,
+    s: usize,
+    t: usize,
+    g: Vec<Vec<(usize, Hyper<X>)>>,
+}
+impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> Dinic<X> {
+    pub fn new(s: usize, t: usize, neigh: &Vec<Vec<(usize, Hyper<X>)>>) -> Self {
+        let size = neigh.len();
+        let mut g = vec![vec![]; size];
+        for u in 0..size {
+            for &(v, cap) in neigh[u].iter() {
+                g[u].push((v, cap));
+                g[v].push((u, Hyper::zero()));
             }
         }
-        let mut sum = Real(X::zero());
+        Self { size, s, t, g }
+    }
+    pub fn maxflow(&self) -> Hyper<X> {
+        let mut sum = Hyper::zero();
+        let mut flw = vec![vec![Hyper::zero(); self.size]; self.size];
         loop {
-            let level = Dinic::levelize(&neigh, s, t, &cap, &flw);
-            if level[t] == -1 {
+            let level = self.levelize(&flw);
+            if level[self.t].is_none() {
                 break;
             }
-            let mut used = vec![false; n];
-            sum = sum + Dinic::augment(Inf, &level, &mut used, &neigh, s, t, &cap, &mut flw);
+            sum = sum + self.augment(Hyper::Inf, &mut flw, &level, self.s);
         }
         sum
     }
-    fn levelize<X: Copy + Eq + Group>(
-        neigh: &Vec<Vec<(usize, X)>>,
-        s: usize,
-        t: usize,
-        cap: &Vec<Vec<Hyper<X>>>,
-        flw: &Vec<Vec<Hyper<X>>>,
-    ) -> Vec<i32> {
-        use Hyper::*;
-        let n = neigh.len();
-        let mut level = vec![-1; n];
+    fn levelize(&self, flw: &Vec<Vec<Hyper<X>>>) -> Vec<Option<usize>> {
+        let mut level = vec![None; self.size];
         let mut q = std::collections::VecDeque::new();
-        q.push_back(s);
+        q.push_back(self.s);
+        level[self.s] = Some(0);
         while let Some(u) = q.pop_front() {
-            if u == t {
+            if level[u].is_none() || u == self.t {
                 break;
             }
-            for &(v, _) in neigh[u].iter() {
-                if level[v] == -1 && cap[u][v] - flw[u][v] != Real(X::zero()) {
-                    level[v] = level[u] + 1;
+            for &(v, cap) in self.g[u].iter() {
+                if level[v].is_none() && cap > flw[u][v] {
+                    level[v] = level[u].map(|x| x + 1);
                     q.push_back(v);
                 }
             }
         }
         level
     }
-    fn augment<X: Copy + Eq + Ord + Group>(
+    fn augment(
+        &self,
         limit: Hyper<X>,
-        level: &Vec<i32>,
-        mut used: &mut Vec<bool>,
-        neigh: &Vec<Vec<(usize, X)>>,
-        u: usize,
-        t: usize,
-        cap: &Vec<Vec<Hyper<X>>>,
         mut flw: &mut Vec<Vec<Hyper<X>>>,
+        level: &Vec<Option<usize>>,
+        u: usize,
     ) -> Hyper<X> {
-        use Hyper::*;
-        if u == t {
+        if u == self.t {
             limit
-        } else if used[u] || limit == Real(X::zero()) {
-            Real(X::zero())
         } else {
-            used[u] = true;
-            for &(v, _) in neigh[u].iter() {
+            for &(v, cap) in self.g[u].iter() {
                 if level[v] > level[u] {
-                    let limit2 = std::cmp::min(limit, cap[u][v] - flw[u][v]);
-                    let f = Dinic::augment(limit2, &level, &mut used, &neigh, v, t, &cap, &mut flw);
-                    if f > Real(X::zero()) {
+                    let limit = std::cmp::min(limit, cap - flw[u][v]);
+                    let f = self.augment(limit, &mut flw, &level, v);
+                    if f > Hyper::zero() {
                         flw[u][v] = flw[u][v] + f;
                         flw[v][u] = flw[v][u] - f;
-                        used[u] = false;
                         return f;
                     }
                 }
             }
-            Real(X::zero())
+            Hyper::zero()
         }
     }
 }
 
 #[cfg(test)]
 mod test_dinic {
+    use crate::algebra::hyper::Hyper::*;
     use crate::graph::directed::dinic::*;
 
     #[test]
     fn test_a() {
         let neigh = vec![
-            vec![(1, 1), (3, 1), (5, 1)],
-            vec![(2, 1), (4, 1)],
-            vec![(6, 1)],
-            vec![(2, 1)],
-            vec![(6, 1)],
-            vec![(2, 1), (4, 1)],
+            vec![(1, Real(1)), (3, Real(1)), (5, Real(1))],
+            vec![(2, Real(1)), (4, Real(1))],
+            vec![(6, Real(1))],
+            vec![(2, Real(1))],
+            vec![(6, Real(1))],
+            vec![(2, Real(1)), (4, Real(1))],
             vec![],
         ];
-        assert_eq!(Dinic::flow(0, 6, &neigh).unwrap(), 2);
+        assert_eq!(Dinic::new(0, 6, &neigh).maxflow(), Real(2));
     }
 
     #[test]
     fn test_b() {
         let neigh = vec![
-            vec![(1, 3), (2, 3)],
-            vec![(2, 2), (3, 3)],
-            vec![(4, 2)],
-            vec![(4, 3), (5, 2)],
-            vec![(5, 3)],
+            vec![(1, Real(3)), (2, Real(3))],
+            vec![(2, Real(2)), (3, Real(3))],
+            vec![(4, Real(2))],
+            vec![(4, Real(3)), (5, Real(2))],
+            vec![(5, Real(3))],
             vec![],
         ];
-        assert_eq!(Dinic::flow(0, 5, &neigh).unwrap(), 5);
+        assert_eq!(Dinic::new(0, 5, &neigh).maxflow(), Real(5));
     }
 }

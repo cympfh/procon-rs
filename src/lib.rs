@@ -6,6 +6,7 @@ pub mod geometry2d;
 pub mod graph;
 pub mod misc;
 pub mod num;
+pub mod opt;
 pub mod sequence;
 pub mod set;
 pub mod string;

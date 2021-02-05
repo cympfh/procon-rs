@@ -72,6 +72,7 @@ import() {
 
   # import another files
   cat "${BASEDIR}${1}.rs" |
+    sed '/IGNORE/d' |
     delete_test |
     while read line; do
     case "$line" in

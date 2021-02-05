@@ -1,4 +1,5 @@
 pub mod act;
+pub mod act_add;
 pub mod act_assign;
 pub mod complex;
 pub mod group;

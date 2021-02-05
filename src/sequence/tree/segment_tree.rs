@@ -86,6 +86,7 @@ impl<X: std::fmt::Debug> SegmentTree<X> {
 
 #[cfg(test)]
 mod test_rmq {
+    use crate::algebra::monoid_sumprod::Sum;
     use crate::sequence::tree::segment_tree::*;
 
     #[test]

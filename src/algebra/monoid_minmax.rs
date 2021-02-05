@@ -7,26 +7,21 @@ pub enum MaxInt<X> {
 }
 impl<X> MaxInt<X> {
     pub fn unwrap(self) -> X {
-        if let Self::Val(x) = self {
-            x
-        } else {
-            panic!()
+        match self {
+            Self::Val(x) => x,
+            _ => panic!(),
         }
     }
 }
-impl<X: Ord> std::ops::Mul for MaxInt<X> {
-    type Output = Self;
-    fn mul(self, other: Self) -> Self {
+monoid! {
+    [X:Ord] for MaxInt<X>;
+    unit = MaxInt::Minimal;
+    mul(self, other) = {
         if self > other {
             self
         } else {
             other
         }
-    }
-}
-impl<X: Ord + Copy> Monoid for MaxInt<X> {
-    fn unit() -> Self {
-        MaxInt::Minimal
     }
 }
 
@@ -37,26 +32,21 @@ pub enum MinInt<X> {
 }
 impl<X> MinInt<X> {
     pub fn unwrap(self) -> X {
-        if let Self::Val(x) = self {
-            x
-        } else {
-            panic!();
+        match self {
+            Self::Val(x) => x,
+            _ => panic!(),
         }
     }
 }
-impl<X: Ord> std::ops::Mul for MinInt<X> {
-    type Output = Self;
-    fn mul(self, other: Self) -> Self {
+monoid! {
+    [X:Ord] for MinInt<X>;
+    unit = MinInt::Maximal;
+    mul(self, other) = {
         if self < other {
             self
         } else {
             other
         }
-    }
-}
-impl<X: Ord + Copy> Monoid for MinInt<X> {
-    fn unit() -> Self {
-        MinInt::Maximal
     }
 }
 
@@ -66,6 +56,7 @@ mod test_monoid_rmq {
     #[test]
     fn test_max() {
         assert_eq!(MaxInt::Val(2).unwrap(), 2);
+        assert_eq!(MaxInt::Val(1) * MaxInt::Val(2), MaxInt::Val(2));
         assert_eq!(MaxInt::Val(2) * MaxInt::Val(1), MaxInt::Val(2));
         assert_eq!(MaxInt::Val(2) * MaxInt::Minimal, MaxInt::Val(2));
         assert_eq!(MaxInt::Minimal * MaxInt::Val(1), MaxInt::Val(1));
@@ -73,6 +64,7 @@ mod test_monoid_rmq {
     #[test]
     fn test_min() {
         assert_eq!(MinInt::Val(2).unwrap(), 2);
+        assert_eq!(MinInt::Val(1) * MinInt::Val(2), MinInt::Val(1));
         assert_eq!(MinInt::Val(2) * MinInt::Val(1), MinInt::Val(1));
         assert_eq!(MinInt::Val(2) * MinInt::Maximal, MinInt::Val(2));
         assert_eq!(MinInt::Maximal * MinInt::Val(1), MinInt::Val(1));

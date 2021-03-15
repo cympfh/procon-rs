@@ -1,4 +1,7 @@
 /// Number - Extended GCD on Integers
+/// Solve of a*x + b*y = gcd(x, y)
+/// - Args: x, y
+/// - Returns: (a, b, gcd(x, y))
 use crate::num::base::*;
 pub fn gcd_ex<N: Int>(x: N, y: N) -> (N, N, N) {
     let mut r0 = x;

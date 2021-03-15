@@ -1,6 +1,7 @@
 pub mod base;
 pub mod binom_modint;
 pub mod binom_pascal;
+pub mod chinese_remainder_theorem;
 pub mod dlog;
 pub mod euler_phi;
 pub mod gcd;

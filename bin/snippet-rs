@@ -84,7 +84,6 @@ import() {
 
   # show body
   cat "${BASEDIR}${1}.rs" |
-    sed '/^\/\/\//d' |
     sed '/^use crate.*/d' |
     awk 'NR>1 || /^./' |
     delete_test

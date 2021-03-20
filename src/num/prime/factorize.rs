@@ -18,7 +18,9 @@ pub fn factorize(n: u64) -> Vec<(u64, usize)> {
             m /= x;
             c += 1;
         }
-        r.push((x, c));
+        if c > 0 {
+            r.push((x, c));
+        }
     }
     r
 }

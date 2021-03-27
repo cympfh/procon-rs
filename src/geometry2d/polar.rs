@@ -30,6 +30,11 @@ impl Polar {
     pub fn to_xy(&self) -> Point {
         Point(self.r * self.theta.cos(), self.r * self.theta.sin())
     }
+    pub fn from_xy(x: &Point) -> Self {
+        let r = x.norm();
+        let theta = x.arg();
+        Self { theta, r }
+    }
 }
 
 #[cfg(test)]
@@ -49,5 +54,11 @@ mod test_line {
         assert_eq!(Polar::new(0.0, 1.0).to_xy(), Point(1.0, 0.0));
         assert_eq!(Polar::new(Polar::PI / 2.0, 1.0).to_xy(), Point(0.0, 1.0));
         assert_eq!(Polar::new(Polar::PI, 1.0).to_xy(), Point(-1.0, 0.0));
+    }
+
+    #[test]
+    fn from_xy() {
+        assert_eq!(Polar::from_xy(&Point(1.0, 0.0)).to_xy(), Point(1.0, 0.0));
+        assert_eq!(Polar::from_xy(&Point(1.0, -2.0)).to_xy(), Point(1.0, -2.0));
     }
 }

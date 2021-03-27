@@ -17,14 +17,8 @@ impl Point {
     }
     pub fn arg(&self) -> f64 {
         let x = self.0 / self.norm();
-        (if x < -1.0 {
-            -1.0
-        } else if x > 1.0 {
-            1.0
-        } else {
-            x
-        } as f64)
-            .acos()
+        let y = self.1 / self.norm();
+        y.atan2(x)
     }
     pub fn distance(&self, other: &Point) -> f64 {
         (*self - *other).norm()

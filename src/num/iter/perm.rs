@@ -2,10 +2,15 @@
 pub struct Permutation {
     n: usize,
     idx: usize,
+    done: bool,
 }
 impl Permutation {
     pub fn new(n: usize) -> Permutation {
-        Permutation { n, idx: 0 }
+        Permutation {
+            n,
+            idx: 0,
+            done: false,
+        }
     }
     pub fn from(mut perm: Vec<usize>) -> Permutation {
         let n = perm.len();
@@ -22,9 +27,20 @@ impl Permutation {
                 }
             }
         }
-        Permutation { n, idx }
+        Permutation {
+            n,
+            idx,
+            done: false,
+        }
     }
-    pub fn to_vec(&self) -> Option<Vec<usize>> {
+    pub fn to_vec(&mut self) -> Option<Vec<usize>> {
+        if self.done {
+            return None;
+        }
+        if self.n == 0 {
+            self.done = true;
+            return Some(vec![]);
+        }
         let mut r = vec![0; self.n];
         let mut idx = self.idx;
         for k in 1..self.n {
@@ -32,6 +48,7 @@ impl Permutation {
             idx /= k + 1;
         }
         if idx > 0 {
+            self.done = true;
             return None;
         }
         r.reverse();
@@ -75,6 +92,20 @@ mod test_perm {
         assert_eq!(perm.next(), Some(vec![1, 2, 0]));
         assert_eq!(perm.next(), Some(vec![2, 0, 1]));
         assert_eq!(perm.next(), Some(vec![2, 1, 0]));
+        assert_eq!(perm.next(), None);
+    }
+
+    #[test]
+    fn perm_of_one() {
+        let mut perm = Permutation::new(1);
+        assert_eq!(perm.next(), Some(vec![0]));
+        assert_eq!(perm.next(), None);
+    }
+
+    #[test]
+    fn perm_of_zero() {
+        let mut perm = Permutation::new(0);
+        assert_eq!(perm.next(), Some(vec![]));
         assert_eq!(perm.next(), None);
     }
 }

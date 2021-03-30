@@ -57,4 +57,11 @@ mod test_combination_perm {
         assert_eq!(perm.next(), Some(vec![2, 1]));
         assert_eq!(perm.next(), None);
     }
+
+    #[test]
+    fn test_take_zero() {
+        let mut perm = Combination::new(1, 0);
+        assert_eq!(perm.next(), Some(vec![]));
+        assert_eq!(perm.next(), None);
+    }
 }

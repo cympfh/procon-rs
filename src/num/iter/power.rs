@@ -3,16 +3,28 @@ pub struct PowerPermutation {
     n: usize,
     m: usize,
     ar: Vec<usize>,
+    done: bool,
 }
 impl PowerPermutation {
-    pub fn new(n: usize, m: usize) -> PowerPermutation {
-        let ar = vec![0; m];
-        PowerPermutation { n: n, m: m, ar: ar }
+    pub fn new(n: usize, m: usize) -> Self {
+        Self {
+            n,
+            m,
+            ar: vec![0; m],
+            done: false,
+        }
     }
 }
 impl Iterator for PowerPermutation {
     type Item = Vec<usize>;
     fn next(&mut self) -> Option<Vec<usize>> {
+        if self.done {
+            return None;
+        }
+        if self.m == 0 {
+            self.done = true;
+            return Some(self.ar.clone());
+        }
         if self.ar[self.m - 1] >= self.n {
             return None;
         }
@@ -26,7 +38,7 @@ impl Iterator for PowerPermutation {
                 break;
             }
         }
-        return Some(r);
+        Some(r)
     }
 }
 
@@ -46,6 +58,34 @@ mod test_power_perm {
         assert_eq!(perm.next(), Some(vec![0, 2]));
         assert_eq!(perm.next(), Some(vec![1, 2]));
         assert_eq!(perm.next(), Some(vec![2, 2]));
+        assert_eq!(perm.next(), None);
+    }
+
+    #[test]
+    fn test_small() {
+        let mut perm = PowerPermutation::new(2, 1);
+        assert_eq!(perm.next(), Some(vec![0]));
+        assert_eq!(perm.next(), Some(vec![1]));
+        assert_eq!(perm.next(), None);
+    }
+
+    #[test]
+    fn test_take_zero() {
+        let mut perm = PowerPermutation::new(2, 0);
+        assert_eq!(perm.next(), Some(vec![]));
+        assert_eq!(perm.next(), None);
+    }
+
+    #[test]
+    fn test_take_zero_from_zero() {
+        let mut perm = PowerPermutation::new(0, 0);
+        assert_eq!(perm.next(), Some(vec![]));
+        assert_eq!(perm.next(), None);
+    }
+
+    #[test]
+    fn test_from_zero() {
+        let mut perm = PowerPermutation::new(0, 2);
         assert_eq!(perm.next(), None);
     }
 }

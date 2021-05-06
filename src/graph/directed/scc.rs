@@ -1,39 +1,38 @@
 /// Graph - Directed - Strongly Connected Component (SCC)
 /// convert a DiGraph to a DAG
-/// scc: (neigh) -> (cmp, dag)
+/// scc: (g) -> (cmp, dag)
 ///   where
-///     neigh is a neigh list of DiGraph
-///     cmp is mapping vector; cmp[DiGraph-Vertex-Index] = DAG-Vertex-Index
-///     dag is a neigh list of DAG
-pub fn scc(neigh: &Vec<Vec<usize>>) -> (Vec<usize>, Vec<Vec<usize>>) {
-    let n = neigh.len();
+///     `g` is a neighbor list of DiGraph
+///     `cmp` is mapping vector; cmp[DiGraph-Vertex-Index] = DAG-Vertex-Index
+///     `dag` is a neighbor list of DAG
+pub fn scc(g: &Vec<Vec<usize>>) -> (Vec<usize>, Vec<Vec<usize>>) {
+    let n = g.len();
 
     // Post-order traversal
     let mut po = vec![];
     {
-        let mut used = vec![false; n];
-        for u in 0..n {
-            let mut stack = vec![u];
-            let mut pre = vec![];
-            while let Some(v) = stack.pop() {
-                if used[v] {
-                    continue;
-                }
-                used[v] = true;
-                pre.push(v);
-                for &w in neigh[v].iter() {
-                    stack.push(w)
+        fn dfs(u: usize, g: &Vec<Vec<usize>>, mut used: &mut Vec<bool>, mut po: &mut Vec<usize>) {
+            if used[u] {
+                return;
+            }
+            used[u] = true;
+            for &v in g[u].iter() {
+                if !used[v] {
+                    dfs(v, &g, &mut used, &mut po);
                 }
             }
-            pre.reverse();
-            po.extend(pre);
+            po.push(u);
+        }
+        let mut used = vec![false; n];
+        for u in 0..n {
+            dfs(u, &g, &mut used, &mut po);
         }
     }
 
-    let mut neigh_r = vec![vec![]; n];
+    let mut g_r = vec![vec![]; n];
     for u in 0..n {
-        for &v in neigh[u].iter() {
-            neigh_r[v].push(u);
+        for &v in g[u].iter() {
+            g_r[v].push(u);
         }
     }
 
@@ -55,7 +54,7 @@ pub fn scc(neigh: &Vec<Vec<usize>>) -> (Vec<usize>, Vec<Vec<usize>>) {
                 }
                 used[v] = true;
                 cmp[v] = k;
-                for &w in neigh_r[v].iter() {
+                for &w in g_r[v].iter() {
                     stack.push(w)
                 }
             }
@@ -68,7 +67,7 @@ pub fn scc(neigh: &Vec<Vec<usize>>) -> (Vec<usize>, Vec<Vec<usize>>) {
     let mut dag = vec![vec![]; m];
     for u in 0..n {
         let u2 = cmp[u];
-        for &v in neigh[u].iter() {
+        for &v in g[u].iter() {
             let v2 = cmp[v];
             if u2 != v2 {
                 dag[u2].push(v2)
@@ -89,16 +88,16 @@ mod test_scc {
 
     #[test]
     fn it_works() {
-        let neigh = vec![vec![1], vec![0, 2], vec![3], vec![2]];
-        let (cmp, dag) = scc(&neigh);
+        let g = vec![vec![1], vec![0, 2], vec![3], vec![2]];
+        let (cmp, dag) = scc(&g);
         assert_eq!(cmp, vec![0, 0, 1, 1]);
         assert_eq!(dag, vec![vec![1], vec![]]);
     }
 
     #[test]
     fn it_connected() {
-        let neigh = vec![vec![1], vec![0, 2], vec![1, 3], vec![2]];
-        let (cmp, _dag) = scc(&neigh);
+        let g = vec![vec![1], vec![0, 2], vec![1, 3], vec![2]];
+        let (cmp, _dag) = scc(&g);
         assert_eq!(cmp, vec![0, 0, 0, 0]);
     }
 }

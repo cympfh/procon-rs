@@ -5,7 +5,7 @@ pub struct LCA {
 }
 impl LCA {
     /// Directed(Parent -> Child)
-    pub fn new(tree: &Vec<Vec<usize>>, root: usize) -> Self {
+    pub fn new(tree: &[Vec<usize>], root: usize) -> Self {
         let n = tree.len();
         let log2n = (0..n).map(|i| n >> i).take_while(|&x| x > 0).count();
         let mut parent = vec![vec![None; log2n]; n];
@@ -34,33 +34,41 @@ impl LCA {
                 }
             }
         }
-        LCA {
-            depth: depth,
-            parent: parent,
+        LCA { depth, parent }
+    }
+    /// 頂点 u を深さ depth まで持ち上げたときの頂点を返す
+    pub fn liftup(&self, u: usize, depth: usize) -> usize {
+        if self.depth[u] <= depth {
+            u
+        } else {
+            let mut mhb = 0;
+            let log2n = self.parent[0].len();
+            for i in 0..log2n {
+                if (self.depth[u] - depth) >> i > 0 {
+                    mhb = i;
+                }
+            }
+            let v = self.parent[u][mhb].unwrap();
+            self.liftup(v, depth)
         }
     }
+    /// 共通祖先
     pub fn get(&self, u: usize, v: usize) -> usize {
         if self.depth[u] > self.depth[v] {
             return self.get(v, u);
         }
         let mut u = u;
-        let mut v = v;
-        while self.depth[u] < self.depth[v] {
-            v = self.parent[v][0].unwrap();
-        }
+        let mut v = self.liftup(v, self.depth[u]);
         if u == v {
             return u;
         }
         let log2n = self.parent[0].len();
         for k in (0..log2n).rev() {
-            match (self.parent[u][k], self.parent[v][k]) {
-                (Some(s), Some(t)) => {
-                    if s != t {
-                        u = s;
-                        v = t;
-                    }
+            if let (Some(s), Some(t)) = (self.parent[u][k], self.parent[v][k]) {
+                if s != t {
+                    u = s;
+                    v = t;
                 }
-                _ => {}
             }
         }
         self.parent[u][0].unwrap()

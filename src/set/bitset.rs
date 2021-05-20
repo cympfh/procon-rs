@@ -8,6 +8,12 @@ impl BitSet {
     pub fn from(data: u128) -> Self {
         BitSet(data)
     }
+    pub fn id(&self) -> usize {
+        self.0 as usize
+    }
+    pub fn is_empty(&self) -> bool {
+        self.0 == 0
+    }
     pub fn contains(&self, i: usize) -> bool {
         (self.0 & (1 << i)) != 0
     }
@@ -252,5 +258,17 @@ mod test_bitset {
                 (bitset!(0, 1), bitset!()),
             ]
         );
+    }
+
+    #[test]
+    fn test_is_empty() {
+        assert!(BitSet::from(0).is_empty());
+        assert!(!BitSet::from(1).is_empty());
+    }
+
+    #[test]
+    fn test_id() {
+        assert_eq!(BitSet::from(0_u128).id(), 0_usize);
+        assert_eq!(BitSet::from(31_u128).id(), 31_usize);
     }
 }

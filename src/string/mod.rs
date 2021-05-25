@@ -1,4 +1,5 @@
 pub mod manacher;
+pub mod rolling_hash;
 pub mod runlength;
 pub mod shiftand;
 pub mod suffix_array;

@@ -19,7 +19,7 @@ impl MoyasuUmeruSolver {
     /// +cost when var `i` is `b`.
     fn add_constraint_node(&mut self, i: usize, b: bool, cost: Hyper<i64>) {
         let j = if b { 0 } else { 1 };
-        self.cost1[i][j] = cost;
+        self.cost1[i][j] += cost;
     }
     /// +cost when var `i` is true AND var `j` is false.
     fn add_constraint_edge(&mut self, i: usize, j: usize, cost: Hyper<i64>) {

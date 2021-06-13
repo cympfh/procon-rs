@@ -27,6 +27,11 @@ impl<X: Group> std::ops::Add for Hyper<X> {
         }
     }
 }
+impl<X: Clone + Group> std::ops::AddAssign for Hyper<X> {
+    fn add_assign(&mut self, rhs: Hyper<X>) {
+        *self = (*self).clone() + rhs;
+    }
+}
 impl<X: Group> std::ops::Sub for Hyper<X> {
     type Output = Self;
     fn sub(self, rhs: Hyper<X>) -> Hyper<X> {

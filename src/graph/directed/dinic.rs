@@ -25,26 +25,27 @@ impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> Dinic<X> {
         let mut flw = vec![vec![Hyper::zero(); self.size]; self.size];
         loop {
             let level = self.levelize(&flw);
-            if level[self.t].is_none() {
+            if level[self.t] >= self.size {
                 break;
             }
             sum = sum + self.augment(Hyper::Inf, &mut flw, &level, self.s);
         }
         sum
     }
-    fn levelize(&self, flw: &Vec<Vec<Hyper<X>>>) -> Vec<Option<usize>> {
-        let mut level = vec![None; self.size];
-        let mut q = std::collections::VecDeque::new();
-        q.push_back(self.s);
-        level[self.s] = Some(0);
-        while let Some(u) = q.pop_front() {
-            if level[u].is_none() || u == self.t {
+    fn levelize(&self, flw: &Vec<Vec<Hyper<X>>>) -> Vec<usize> {
+        use std::{cmp::Reverse, collections::BinaryHeap};
+        let mut level = vec![self.size; self.size];
+        let mut q = BinaryHeap::new();
+        q.push((Reverse(0), self.s));
+        level[self.s] = 0;
+        while let Some((_, u)) = q.pop() {
+            if u == self.t {
                 break;
             }
             for &(v, cap) in self.g[u].iter() {
-                if level[v].is_none() && cap > flw[u][v] {
-                    level[v] = level[u].map(|x| x + 1);
-                    q.push_back(v);
+                if level[v] == self.size && cap > flw[u][v] {
+                    level[v] = level[u] + 1;
+                    q.push((Reverse(level[v]), v));
                 }
             }
         }
@@ -54,7 +55,7 @@ impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> Dinic<X> {
         &self,
         limit: Hyper<X>,
         mut flw: &mut Vec<Vec<Hyper<X>>>,
-        level: &Vec<Option<usize>>,
+        level: &Vec<usize>,
         u: usize,
     ) -> Hyper<X> {
         if u == self.t {

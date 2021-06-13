@@ -1,4 +1,4 @@
-/// Graph - Directed - Dinic's MaxFlow
+/// Graph - Directed - Dinic's MaxFlow - O(V^2 E)
 use crate::algebra::group::*;
 use crate::algebra::hyper::*;
 
@@ -9,7 +9,7 @@ pub struct Dinic<X> {
     g: Vec<Vec<(usize, Hyper<X>)>>,
 }
 impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> Dinic<X> {
-    pub fn new(s: usize, t: usize, neigh: &Vec<Vec<(usize, Hyper<X>)>>) -> Self {
+    pub fn new(s: usize, t: usize, neigh: &[Vec<(usize, Hyper<X>)>]) -> Self {
         let size = neigh.len();
         let mut g = vec![vec![]; size];
         for u in 0..size {
@@ -28,11 +28,11 @@ impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> Dinic<X> {
             if level[self.t] >= self.size {
                 break;
             }
-            sum = sum + self.augment(Hyper::Inf, &mut flw, &level, self.s);
+            sum += self.augment(Hyper::Inf, &mut flw, &level, self.s);
         }
         sum
     }
-    fn levelize(&self, flw: &Vec<Vec<Hyper<X>>>) -> Vec<usize> {
+    fn levelize(&self, flw: &[Vec<Hyper<X>>]) -> Vec<usize> {
         use std::{cmp::Reverse, collections::BinaryHeap};
         let mut level = vec![self.size; self.size];
         let mut q = BinaryHeap::new();
@@ -55,7 +55,7 @@ impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> Dinic<X> {
         &self,
         limit: Hyper<X>,
         mut flw: &mut Vec<Vec<Hyper<X>>>,
-        level: &Vec<usize>,
+        level: &[usize],
         u: usize,
     ) -> Hyper<X> {
         if u == self.t {
@@ -66,7 +66,7 @@ impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> Dinic<X> {
                     let limit = std::cmp::min(limit, cap - flw[u][v]);
                     let f = self.augment(limit, &mut flw, &level, v);
                     if f > Hyper::zero() {
-                        flw[u][v] = flw[u][v] + f;
+                        flw[u][v] += f;
                         flw[v][u] = flw[v][u] - f;
                         return f;
                     }

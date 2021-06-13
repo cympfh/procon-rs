@@ -38,6 +38,11 @@ impl<X: Group> std::ops::Sub for Hyper<X> {
         self + (-rhs)
     }
 }
+impl<X: Clone + Group> std::ops::SubAssign for Hyper<X> {
+    fn sub_assign(&mut self, rhs: Hyper<X>) {
+        *self = (*self).clone() - rhs;
+    }
+}
 impl<X: Group> std::ops::Neg for Hyper<X> {
     type Output = Self;
     fn neg(self) -> Hyper<X> {
@@ -81,5 +86,19 @@ mod test_hyper {
         assert!(Hyper::Real(0) < Hyper::Inf);
         assert!(Hyper::<i32>::NegInf < Hyper::Inf);
         assert_eq!(Hyper::Real(1) + 3, Hyper::Real(4));
+    }
+    #[test]
+    fn assign_op() {
+        {
+            let mut a = Hyper::Real(0_i32);
+            a += Hyper::Real(3);
+            assert_eq!(a, Hyper::Real(3));
+            a -= Hyper::Real(6);
+            assert_eq!(a, Hyper::Real(-3));
+            a += Hyper::Inf;
+            assert_eq!(a, Hyper::Inf);
+            a -= Hyper::Inf;
+            assert_eq!(a, Hyper::Inf);
+        }
     }
 }

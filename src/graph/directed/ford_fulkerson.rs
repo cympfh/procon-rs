@@ -1,14 +1,15 @@
-/// Graph - Directed - Dinic's MaxFlow - O(V^2 E)
+/// Graph - Directed - Ford-Fullkerson's MaxFlow - O(FE)
 use crate::algebra::group::*;
 use crate::algebra::hyper::*;
 
-pub struct Dinic<X> {
+pub struct FordFulkerson<X> {
     size: usize,
     s: usize,
     t: usize,
     g: Vec<Vec<(usize, Hyper<X>)>>,
 }
-impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> Dinic<X> {
+
+impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> FordFulkerson<X> {
     pub fn new(s: usize, t: usize, neigh: &[Vec<(usize, Hyper<X>)>]) -> Self {
         let size = neigh.len();
         let mut g = vec![vec![]; size];
@@ -24,47 +25,33 @@ impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> Dinic<X> {
         let mut sum = Hyper::zero();
         let mut flw = vec![vec![Hyper::zero(); self.size]; self.size];
         loop {
-            let level = self.levelize(&flw);
-            if level[self.t] >= self.size {
+            let mut visited = vec![false; self.size];
+            let df = self.augment(Hyper::Inf, &mut flw, &mut visited, self.s);
+            if df <= Hyper::zero() {
                 break;
             }
-            sum += self.augment(Hyper::Inf, &mut flw, &level, self.s);
+            sum += df;
         }
         sum
-    }
-    fn levelize(&self, flw: &[Vec<Hyper<X>>]) -> Vec<usize> {
-        use std::{cmp::Reverse, collections::BinaryHeap};
-        let mut level = vec![self.size; self.size];
-        let mut q = BinaryHeap::new();
-        q.push((Reverse(0), self.s));
-        level[self.s] = 0;
-        while let Some((_, u)) = q.pop() {
-            if u == self.t {
-                break;
-            }
-            for &(v, cap) in self.g[u].iter() {
-                if level[v] == self.size && cap > flw[u][v] {
-                    level[v] = level[u] + 1;
-                    q.push((Reverse(level[v]), v));
-                }
-            }
-        }
-        level
     }
     fn augment(
         &self,
         limit: Hyper<X>,
-        mut flw: &mut Vec<Vec<Hyper<X>>>,
-        level: &[usize],
+        mut flw: &mut [Vec<Hyper<X>>],
+        mut visited: &mut [bool],
         u: usize,
     ) -> Hyper<X> {
         if u == self.t {
             return limit;
         }
+        visited[u] = true;
         for &(v, cap) in self.g[u].iter() {
-            if level[v] > level[u] {
+            if visited[v] {
+                continue;
+            }
+            if cap > flw[u][v] {
                 let limit = std::cmp::min(limit, cap - flw[u][v]);
-                let f = self.augment(limit, &mut flw, &level, v);
+                let f = self.augment(limit, &mut flw, &mut visited, v);
                 if f > Hyper::zero() {
                     flw[u][v] += f;
                     flw[v][u] -= f;
@@ -77,9 +64,9 @@ impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> Dinic<X> {
 }
 
 #[cfg(test)]
-mod test_dinic {
+mod test_ffa {
     use crate::algebra::hyper::Hyper::*;
-    use crate::graph::directed::dinic::*;
+    use crate::graph::directed::ford_fulkerson::*;
 
     #[test]
     fn test_a() {
@@ -92,7 +79,7 @@ mod test_dinic {
             vec![(2, Real(1)), (4, Real(1))],
             vec![],
         ];
-        assert_eq!(Dinic::new(0, 6, &neigh).maxflow(), Real(2));
+        assert_eq!(FordFulkerson::new(0, 6, &neigh).maxflow(), Real(2));
     }
 
     #[test]
@@ -105,6 +92,6 @@ mod test_dinic {
             vec![(5, Real(3))],
             vec![],
         ];
-        assert_eq!(Dinic::new(0, 5, &neigh).maxflow(), Real(5));
+        assert_eq!(FordFulkerson::new(0, 5, &neigh).maxflow(), Real(5));
     }
 }

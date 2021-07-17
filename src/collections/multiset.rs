@@ -39,30 +39,31 @@ impl<K: Eq + std::hash::Hash> MultiSet<K> {
 
 #[cfg(test)]
 mod test_multiset {
+    use crate::collections::multiset::*;
+
     #[test]
     fn test_multiset() {
-        #[derive(PartialEq, Eq)]
+        #[derive(PartialEq, Eq, Hash)]
         enum E {
             A,
             B,
-            C,
         }
         use E::*;
-        let c = MultiSet::new();
+        let mut c = MultiSet::new();
         c.add(A);
-        assert(c.size == 1);
-        assert(c.uniq_size() == 1);
+        assert!(c.size == 1);
+        assert!(c.uniq_size() == 1);
         c.add(A);
-        assert(c.size == 2);
-        assert(c.uniq_size() == 1);
+        assert!(c.size == 2);
+        assert!(c.uniq_size() == 1);
         c.add(B);
-        assert(c.size == 3);
-        assert(c.uniq_size() == 2);
+        assert!(c.size == 3);
+        assert!(c.uniq_size() == 2);
         c.remove(A);
-        assert(c.size == 2);
-        assert(c.uniq_size() == 2);
+        assert!(c.size == 2);
+        assert!(c.uniq_size() == 2);
         c.remove(A);
-        assert(c.size == 1);
-        assert(c.uniq_size() == 1);
+        assert!(c.size == 1);
+        assert!(c.uniq_size() == 1);
     }
 }

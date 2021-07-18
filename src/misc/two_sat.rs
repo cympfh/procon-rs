@@ -77,6 +77,12 @@ macro_rules! and {
     ($i:tt => $j:tt) => {
         TwoSATLogic::Implies(TwoSATTerm($i, true), TwoSATTerm($j, true))
     };
+    (not $i:tt) => {
+        TwoSATLogic::Or(TwoSATTerm($i, false), TwoSATTerm($i, false))
+    };
+    ($i:tt) => {
+        TwoSATLogic::Or(TwoSATTerm($i, true), TwoSATTerm($i, true))
+    };
 }
 
 #[cfg(test)]
@@ -115,6 +121,20 @@ mod test_two_sat {
         sat += and!(1 => 0);
         sat += and!(0 or 1);
         sat += and!(not 0 or not 1);
+        assert!(!sat.solve());
+    }
+    #[test]
+    fn test_two_sat_5() {
+        let mut sat = TwoSAT::new(2);
+        sat += and!(0);
+        sat += and!(1);
+        assert!(sat.solve());
+    }
+    #[test]
+    fn test_two_sat_6() {
+        let mut sat = TwoSAT::new(2);
+        sat += and!(0);
+        sat += and!(not 0);
         assert!(!sat.solve());
     }
 }

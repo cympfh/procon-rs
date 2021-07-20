@@ -11,9 +11,7 @@ impl TwoSAT {
     }
     /// 充足判定
     pub fn solve(&self) -> bool {
-        eprintln!("graph = {:?}", &self.graph);
         let (cmp, _) = scc(&self.graph);
-        eprintln!("cmp = {:?}", &cmp);
         for i in 0..self.n {
             if cmp[i * 2] == cmp[i * 2 + 1] {
                 return false;
@@ -36,16 +34,24 @@ impl TwoSATTerm {
 pub enum TwoSATLogic {
     Or(TwoSATTerm, TwoSATTerm),
     Implies(TwoSATTerm, TwoSATTerm),
+    Iff(TwoSATTerm, TwoSATTerm),
 }
 impl std::ops::AddAssign<TwoSATLogic> for TwoSAT {
     fn add_assign(&mut self, and: TwoSATLogic) {
         match and {
             TwoSATLogic::Implies(u, v) => {
                 self.graph[u.val()].push(v.val());
+                self.graph[v.negate().val()].push(u.negate().val());
             }
             TwoSATLogic::Or(u, v) => {
                 self.graph[u.negate().val()].push(v.val());
                 self.graph[v.negate().val()].push(u.val());
+            }
+            TwoSATLogic::Iff(u, v) => {
+                self.graph[u.val()].push(v.val());
+                self.graph[v.val()].push(u.val());
+                self.graph[u.negate().val()].push(v.negate().val());
+                self.graph[v.negate().val()].push(u.negate().val());
             }
         }
     }
@@ -76,6 +82,18 @@ macro_rules! and {
     };
     ($i:tt => $j:tt) => {
         TwoSATLogic::Implies(TwoSATTerm($i, true), TwoSATTerm($j, true))
+    };
+    (not $i:tt <=> not $j:tt) => {
+        TwoSATLogic::Iff(TwoSATTerm($i, false), TwoSATTerm($j, false))
+    };
+    (not $i:tt <=> $j:tt) => {
+        TwoSATLogic::Iff(TwoSATTerm($i, false), TwoSATTerm($j, true))
+    };
+    ($i:tt <=> not $j:tt) => {
+        TwoSATLogic::Iff(TwoSATTerm($i, true), TwoSATTerm($j, false))
+    };
+    ($i:tt <=> $j:tt) => {
+        TwoSATLogic::Iff(TwoSATTerm($i, true), TwoSATTerm($j, true))
     };
     (not $i:tt) => {
         TwoSATLogic::Or(TwoSATTerm($i, false), TwoSATTerm($i, false))
@@ -135,6 +153,24 @@ mod test_two_sat {
         let mut sat = TwoSAT::new(2);
         sat += and!(0);
         sat += and!(not 0);
+        assert!(!sat.solve());
+    }
+
+    #[test]
+    fn test_iff_1() {
+        let mut sat = TwoSAT::new(3);
+        sat += and!(0 <=> 1);
+        sat += and!(not 1 <=> not 2);
+        sat += and!(2 <=> 0);
+        assert!(sat.solve());
+    }
+
+    #[test]
+    fn test_iff_2() {
+        let mut sat = TwoSAT::new(3);
+        sat += and!(0 <=> 1);
+        sat += and!(not 1 <=> 2);
+        sat += and!(2 <=> 0);
         assert!(!sat.solve());
     }
 }

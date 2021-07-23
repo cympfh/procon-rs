@@ -1,3 +1,5 @@
+use crate::geometry2d::ccw::*;
+use crate::geometry2d::line::*;
 /// Geometry2D - Definition of Polygon
 use crate::geometry2d::point::*;
 
@@ -7,6 +9,28 @@ pub struct Polygon(Vec<Point>);
 impl Polygon {
     pub fn len(&self) -> usize {
         self.0.len()
+    }
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
+    /// self must be counter-clockwised.
+    pub fn contains(&self, p: &Point, is_strict: bool) -> bool {
+        let n = self.len();
+        for i in 0..n {
+            let u = self.0[i];
+            let v = self.0[(i + 1) % n];
+            let edge = LineSegment(u, v);
+            match ccw(edge, *p) {
+                CCW::On => {
+                    if is_strict {
+                        return false;
+                    }
+                }
+                CCW::Left => continue,
+                _ => return false,
+            }
+        }
+        true
     }
 }
 
@@ -54,5 +78,18 @@ mod test_line {
             Point(0.0, 1.0),
         ];
         assert_eq!(sq.area(), 1.0);
+    }
+
+    #[test]
+    fn contains() {
+        let tri = poly![Point(0.0, 0.0), Point(1.0, 0.0), Point(1.0, 1.0)];
+        assert!(tri.contains(&Point(1.0, 0.0), false));
+        assert!(!tri.contains(&Point(1.0, 0.0), true));
+        assert!(tri.contains(&Point(0.5, 0.0), false));
+        assert!(!tri.contains(&Point(0.5, 0.0), true));
+        assert!(tri.contains(&Point(0.5, 0.1), false));
+        assert!(tri.contains(&Point(0.5, 0.1), true));
+        assert!(!tri.contains(&Point(0.5, 0.6), false));
+        assert!(!tri.contains(&Point(0.5, 0.6), true));
     }
 }

@@ -1,14 +1,14 @@
-/// Geometry2D - CCW (直線と点の関係)
+/// Geometry2D - CCW (線分と点の関係)
 use crate::geometry2d::line::*;
 use crate::geometry2d::point::*;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum CCW {
-    FRONT,
-    BACK,
-    RIGHT,
-    LEFT,
-    ON,
+    Front,
+    Back,
+    Right,
+    Left,
+    On,
 }
 
 pub fn ccw(l: LineSegment, p: Point) -> CCW {
@@ -22,33 +22,31 @@ pub fn ccw(l: LineSegment, p: Point) -> CCW {
         if equal(0.0, dif.0) {
             let k = dif.1 / dir.1;
             if k > 1.0 {
-                FRONT
+                Front
             } else if k < 0.0 {
-                BACK
+                Back
             } else {
-                ON
+                On
             }
         } else if dir.det(&dif) > 0.0 {
-            LEFT
+            Left
         } else {
-            RIGHT
+            Right
         }
     } else {
         let k = dif.0 / dir.0;
         if equal(dir.1 * k, dif.1) {
             if k > 1.0 {
-                FRONT
+                Front
             } else if k < 0.0 {
-                BACK
+                Back
             } else {
-                ON
+                On
             }
+        } else if dir.det(&dif) > 0.0 {
+            Left
         } else {
-            if dir.det(&dif) > 0.0 {
-                LEFT
-            } else {
-                RIGHT
-            }
+            Right
         }
     }
 }
@@ -64,12 +62,12 @@ mod test_ccw {
         let q = Point(2.0, 0.0);
         let l = LineSegment::new(p, q);
 
-        assert_eq!(ccw(l, p), ON);
-        assert_eq!(ccw(l, q), ON);
-        assert_eq!(ccw(l, Point(1.5, 1.0)), ON);
-        assert_eq!(ccw(l, Point(3.0, -2.0)), FRONT);
-        assert_eq!(ccw(l, Point(0.0, 4.0)), BACK);
-        assert_eq!(ccw(l, Point(0.0, 0.0)), RIGHT);
-        assert_eq!(ccw(l, Point(10.0, 0.0)), LEFT);
+        assert_eq!(ccw(l, p), On);
+        assert_eq!(ccw(l, q), On);
+        assert_eq!(ccw(l, Point(1.5, 1.0)), On);
+        assert_eq!(ccw(l, Point(3.0, -2.0)), Front);
+        assert_eq!(ccw(l, Point(0.0, 4.0)), Back);
+        assert_eq!(ccw(l, Point(0.0, 0.0)), Right);
+        assert_eq!(ccw(l, Point(10.0, 0.0)), Left);
     }
 }

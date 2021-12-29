@@ -1,5 +1,6 @@
 /// Algorithm - Fast Fourier Transform
 use crate::algebra::complex::*;
+use crate::algebra::monoid::*;
 
 pub struct FFT;
 impl FFT {
@@ -15,7 +16,7 @@ impl FFT {
         let pi = (-1.0_f64).acos();
         let theta = 2.0 * pi / (n as f64);
         let z = Complex(theta.cos(), theta.sin() * dir);
-        let mut ac = Complex::unit();
+        let mut ac = Complex::one();
         let mut g = vec![];
         for i in 0..n {
             g.push(g0[i % (n / 2)] + (ac * g1[i % (n / 2)]));

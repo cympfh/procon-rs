@@ -1,5 +1,5 @@
 /// Graph - Directed - Ford-Fullkerson's MaxFlow - O(FE)
-use crate::algebra::group::*;
+use crate::algebra::group_additive::*;
 use crate::algebra::hyper::*;
 
 pub struct FordFulkerson<X> {
@@ -9,7 +9,7 @@ pub struct FordFulkerson<X> {
     g: Vec<Vec<(usize, Hyper<X>)>>,
 }
 
-impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> FordFulkerson<X> {
+impl<X: std::fmt::Debug + Copy + Eq + Ord + AGroup> FordFulkerson<X> {
     pub fn new(s: usize, t: usize, neigh: &[Vec<(usize, Hyper<X>)>]) -> Self {
         let size = neigh.len();
         let mut g = vec![vec![]; size];

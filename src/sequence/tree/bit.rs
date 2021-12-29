@@ -1,11 +1,11 @@
-/// Sequence - Binary Indexed Tree (Fenwick Tree)
-use crate::algebra::group::*;
+/// Sequence - Binary Indexed Tree (Fenwick Tree) of Additive Group (+, 0)
+use crate::algebra::group_additive::*;
 
 pub struct BIT<X> {
     size: usize,
     array: Vec<X>,
 }
-impl<X: Copy + Group> BIT<X> {
+impl<X: Copy + AGroup> BIT<X> {
     pub fn new(n: usize) -> Self {
         BIT {
             size: n,

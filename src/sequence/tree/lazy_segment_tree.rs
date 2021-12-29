@@ -17,8 +17,8 @@ impl<X: Copy + Monoid, M: Copy + Monoid + Act<X>> LazySegmentTree<X, M> {
             length_upper *= 2;
         }
         let size = length_upper * 2 - 1;
-        let data = vec![X::unit(); size];
-        let act = vec![M::unit(); size];
+        let data = vec![X::one(); size];
+        let act = vec![M::one(); size];
         LazySegmentTree {
             length,
             length_upper,
@@ -43,7 +43,7 @@ impl<X: Copy + Monoid, M: Copy + Monoid + Act<X>> LazySegmentTree<X, M> {
             self.act[idx * 2 + 2] = self.act[idx * 2 + 2] * self.act[idx];
         }
         self.data[idx] = self.act[idx].act(self.data[idx]);
-        self.act[idx] = M::unit();
+        self.act[idx] = M::one();
     }
     fn update_sub(
         &mut self,
@@ -77,7 +77,7 @@ impl<X: Copy + Monoid, M: Copy + Monoid + Act<X>> LazySegmentTree<X, M> {
     ) -> X {
         self.propagation(idx);
         if focus.end <= range.start || range.end <= focus.start {
-            X::unit()
+            X::one()
         } else if range.start <= focus.start && focus.end <= range.end {
             self.data[idx]
         } else {

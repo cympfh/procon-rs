@@ -14,14 +14,19 @@ impl<T: PartialOrd> Ord for Total<T> {
     }
 }
 
+pub type Float = Total<f64>;
+pub fn float(x: f64) -> Float {
+    Total(x)
+}
+
 #[cfg(test)]
 mod test_total {
     use crate::algebra::total::*;
     #[test]
     fn it_works() {
-        assert_eq!(Total(0.0).unwrap(), 0.0);
-        let mut v: Vec<Total<f32>> = vec![Total(2.0), Total(1.0), Total(0.0)];
+        assert_eq!(float(0.0).unwrap(), 0.0);
+        let mut v: Vec<Float> = vec![float(2.0), float(1.0), float(0.0)];
         v.sort();
-        assert_eq!(v, vec![Total(0.0), Total(1.0), Total(2.0)]);
+        assert_eq!(v, vec![float(0.0), float(1.0), float(2.0)]);
     }
 }

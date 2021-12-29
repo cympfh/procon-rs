@@ -21,7 +21,7 @@ impl<X: Copy + Monoid> SegmentTree<X> {
             length_upper *= 2;
         }
         let size = length_upper * 2 - 1;
-        let data = vec![X::unit(); size];
+        let data = vec![X::one(); size];
         SegmentTree {
             length,
             length_upper,
@@ -57,7 +57,7 @@ impl<X: Copy + Monoid> SegmentTree<X> {
         focus: std::ops::Range<usize>,
     ) -> X {
         if focus.end <= range.start || range.end <= focus.start {
-            X::unit()
+            X::one()
         } else if range.start <= focus.start && focus.end <= range.end {
             self.data[u]
         } else {
@@ -86,27 +86,27 @@ impl<X: std::fmt::Debug> SegmentTree<X> {
 
 #[cfg(test)]
 mod test_rmq {
-    use crate::algebra::monoid_sumprod::Sum;
+    use crate::algebra::monoid_sumprod::SumMonoid;
     use crate::sequence::tree::segment_tree::*;
 
     #[test]
     fn sum() {
         let v = vec![1, 2, 3, 4];
-        let mut st = SegmentTree::from(v.iter().map(|&x| Sum(x)).collect());
-        assert_eq!(st.product(0..0), Sum(0));
-        assert_eq!(st.product(0..1), Sum(1));
-        assert_eq!(st.product(0..2), Sum(3));
-        assert_eq!(st.product(0..3), Sum(6));
-        assert_eq!(st.product(0..4), Sum(10));
-        assert_eq!(st.product(1..4), Sum(9));
-        assert_eq!(st.product(2..4), Sum(7));
-        assert_eq!(st.product(3..4), Sum(4));
+        let mut st = SegmentTree::from(v.iter().map(|&x| SumMonoid(x)).collect());
+        assert_eq!(st.product(0..0), SumMonoid(0));
+        assert_eq!(st.product(0..1), SumMonoid(1));
+        assert_eq!(st.product(0..2), SumMonoid(3));
+        assert_eq!(st.product(0..3), SumMonoid(6));
+        assert_eq!(st.product(0..4), SumMonoid(10));
+        assert_eq!(st.product(1..4), SumMonoid(9));
+        assert_eq!(st.product(2..4), SumMonoid(7));
+        assert_eq!(st.product(3..4), SumMonoid(4));
 
-        st.update(1, Sum(-2)); //[1,-2,3,4]
-        assert_eq!(st.product(0..0), Sum(0));
-        assert_eq!(st.product(0..1), Sum(1));
-        assert_eq!(st.product(0..2), Sum(-1));
-        assert_eq!(st.product(0..3), Sum(2));
-        assert_eq!(st.product(0..4), Sum(6));
+        st.update(1, SumMonoid(-2)); //[1,-2,3,4]
+        assert_eq!(st.product(0..0), SumMonoid(0));
+        assert_eq!(st.product(0..1), SumMonoid(1));
+        assert_eq!(st.product(0..2), SumMonoid(-1));
+        assert_eq!(st.product(0..3), SumMonoid(2));
+        assert_eq!(st.product(0..4), SumMonoid(6));
     }
 }

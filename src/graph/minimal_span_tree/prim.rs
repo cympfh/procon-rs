@@ -1,7 +1,7 @@
 /// Graph - Minimal Span Tree - Prim
-use crate::algebra::group::*;
+use crate::algebra::group_additive::*;
 
-pub fn prim<Cost: Copy + Group + Ord>(neigh: &Vec<Vec<(usize, Cost)>>) -> Cost {
+pub fn prim<Cost: Copy + AGroup + Ord>(neigh: &Vec<Vec<(usize, Cost)>>) -> Cost {
     use std::cmp::Reverse;
     use std::collections::BinaryHeap;
     let n = neigh.len();

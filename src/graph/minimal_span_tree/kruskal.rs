@@ -1,8 +1,8 @@
 /// Graph - Minimal Spanning Tree - Kruskal Algorithm
-use crate::algebra::group::*;
+use crate::algebra::group_additive::*;
 use crate::set::union_find::*;
 
-pub fn kruskal<Cost: Copy + Group + Ord>(neigh: &Vec<Vec<(usize, Cost)>>) -> Cost {
+pub fn kruskal<Cost: Copy + AGroup + Ord>(neigh: &Vec<Vec<(usize, Cost)>>) -> Cost {
     let n = neigh.len();
     let mut total = Cost::zero();
     let mut uf = UnionFind::new(n);

@@ -1,5 +1,5 @@
 /// Graph - Directed - Dinic's MaxFlow - O(V^2 E)
-use crate::algebra::group::*;
+use crate::algebra::group_additive::*;
 use crate::algebra::hyper::*;
 
 pub struct Dinic<X> {
@@ -8,7 +8,7 @@ pub struct Dinic<X> {
     t: usize,
     g: Vec<Vec<(usize, Hyper<X>)>>,
 }
-impl<X: std::fmt::Debug + Copy + Eq + Ord + Group> Dinic<X> {
+impl<X: std::fmt::Debug + Copy + Eq + Ord + AGroup> Dinic<X> {
     pub fn new(s: usize, t: usize, neigh: &[Vec<(usize, Hyper<X>)>]) -> Self {
         let size = neigh.len();
         let mut g = vec![vec![]; size];

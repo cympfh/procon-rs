@@ -1,4 +1,4 @@
-use crate::algebra::group::*;
+use crate::algebra::group_additive::*;
 use crate::algebra::hyper::*;
 use crate::graph::directed::dinic::*;
 

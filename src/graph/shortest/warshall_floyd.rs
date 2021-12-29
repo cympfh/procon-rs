@@ -1,8 +1,8 @@
 /// Graph - Warshall-Floyd
-use crate::algebra::group::*;
+use crate::algebra::group_additive::*;
 use crate::algebra::hyper::*;
 
-pub fn warshall_floyd<X: Copy + Group + PartialOrd>(d: &mut [Vec<Hyper<X>>]) {
+pub fn warshall_floyd<X: Copy + AGroup + PartialOrd>(d: &mut [Vec<Hyper<X>>]) {
     let n = d.len();
     for i in 0..n {
         d[i][i] = Hyper::<X>::zero();
@@ -26,7 +26,7 @@ mod test_warshall_floyd {
 
     #[test]
     fn test_circle_undirected() {
-        let mut neigh: Vec<Vec<Hyper<i32>>> = vec![
+        let mut neigh: Vec<Vec<Hyper<i64>>> = vec![
             vec![Inf, Real(1), Inf, Inf],
             vec![Inf, Inf, Real(1), Inf],
             vec![Inf, Inf, Inf, Real(1)],
@@ -44,7 +44,7 @@ mod test_warshall_floyd {
 
     #[test]
     fn test_circle_directed() {
-        let mut neigh: Vec<Vec<Hyper<i32>>> = vec![
+        let mut neigh: Vec<Vec<Hyper<i64>>> = vec![
             vec![Inf, Real(1), Inf, Real(1)],
             vec![Real(1), Inf, Real(1), Inf],
             vec![Inf, Real(1), Inf, Real(1)],
@@ -62,7 +62,7 @@ mod test_warshall_floyd {
 
     #[test]
     fn test_circle_unconnected() {
-        let mut neigh: Vec<Vec<Hyper<i32>>> = vec![
+        let mut neigh: Vec<Vec<Hyper<i64>>> = vec![
             vec![Inf, Real(1), Inf, Inf],
             vec![Real(1), Inf, Inf, Inf],
             vec![Inf, Inf, Inf, Real(1)],

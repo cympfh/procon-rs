@@ -1,9 +1,23 @@
-/// Algebra - ModInt (Zp)
+/// Algebra - ModInt (Z/pZ)
+use crate::agroup; // IGNORE
+use crate::algebra::field::*;
+use crate::algebra::group_additive::*;
+use crate::algebra::monoid::*;
+use crate::algebra::ring::*;
+use crate::mint; // IGNORE
+use crate::monoid; // IGNORE
+use crate::ring; // IGNORE
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct ModInt(pub i64, pub i64); // (residual, modulo)
 
 pub const MOD_1000000007: i64 = 1_000_000_007;
 pub const MOD_998244353: i64 = 998_244_353;
+#[macro_export]
+macro_rules! mint {
+    ($x:expr) => {
+        ModInt::new($x, MOD_1000000007)
+    };
+}
 
 impl ModInt {
     pub fn new(residual: i64, modulo: i64) -> ModInt {
@@ -53,25 +67,33 @@ impl std::fmt::Display for ModInt {
         write!(f, "{}", self.0)
     }
 }
-impl std::ops::Neg for ModInt {
-    type Output = Self;
-    fn neg(self) -> Self {
+agroup! {
+    ModInt;
+    zero = mint!(0);
+    add(self, other) = { ModInt::new(self.0 + other.0, self.1) };
+    neg(self) = {
         if self.0 == 0 {
-            return self;
+            self
+        } else {
+            ModInt(self.1 - self.0, self.1)
         }
-        ModInt(self.1 - self.0, self.1)
-    }
+    };
 }
+monoid! {
+    ModInt;
+    one = mint!(0);
+    mul(self, other) = { ModInt::new(self.0 * other.0, self.1) };
+}
+ring! {
+    ModInt;
+    div(self, other) = { self * other.inv() };
+}
+impl Field for ModInt {}
+
 impl std::ops::Add<i64> for ModInt {
     type Output = Self;
     fn add(self, other: i64) -> Self {
         ModInt::new(self.0 + other, self.1)
-    }
-}
-impl std::ops::Add for ModInt {
-    type Output = Self;
-    fn add(self, other: ModInt) -> Self {
-        self + other.0
     }
 }
 impl std::ops::Add<ModInt> for i64 {
@@ -85,21 +107,10 @@ impl std::ops::AddAssign<i64> for ModInt {
         self.0 = ModInt::new(self.0 + other, self.1).0;
     }
 }
-impl std::ops::AddAssign for ModInt {
-    fn add_assign(&mut self, other: ModInt) {
-        *self += other.0;
-    }
-}
 impl std::ops::Sub<i64> for ModInt {
     type Output = Self;
     fn sub(self, other: i64) -> Self {
         ModInt::new(self.0 - other, self.1)
-    }
-}
-impl std::ops::Sub for ModInt {
-    type Output = Self;
-    fn sub(self, other: ModInt) -> Self {
-        self - other.0
     }
 }
 impl std::ops::Sub<ModInt> for i64 {
@@ -113,21 +124,10 @@ impl std::ops::SubAssign<i64> for ModInt {
         self.0 = ModInt::new(self.0 - other, self.1).0;
     }
 }
-impl std::ops::SubAssign for ModInt {
-    fn sub_assign(&mut self, other: ModInt) {
-        *self -= other.0;
-    }
-}
 impl std::ops::Mul<i64> for ModInt {
     type Output = Self;
     fn mul(self, other: i64) -> Self {
         ModInt::new(self.0 * other, self.1)
-    }
-}
-impl std::ops::Mul for ModInt {
-    type Output = Self;
-    fn mul(self, other: ModInt) -> Self {
-        self * other.0
     }
 }
 impl std::ops::Mul<ModInt> for i64 {
@@ -139,17 +139,6 @@ impl std::ops::Mul<ModInt> for i64 {
 impl std::ops::MulAssign<i64> for ModInt {
     fn mul_assign(&mut self, other: i64) {
         self.0 = ModInt::new(self.0 * other, self.1).0;
-    }
-}
-impl std::ops::MulAssign for ModInt {
-    fn mul_assign(&mut self, other: ModInt) {
-        *self *= other.0;
-    }
-}
-impl std::ops::Div for ModInt {
-    type Output = Self;
-    fn div(self, other: ModInt) -> Self {
-        self * other.inv()
     }
 }
 impl std::ops::Div<i64> for ModInt {
@@ -164,32 +153,9 @@ impl std::ops::Div<ModInt> for i64 {
         other.inv() * self
     }
 }
-impl std::ops::DivAssign for ModInt {
-    fn div_assign(&mut self, other: ModInt) {
-        self.0 = (*self / other).0;
-    }
-}
 impl std::ops::DivAssign<i64> for ModInt {
     fn div_assign(&mut self, other: i64) {
         *self /= ModInt(other, self.1);
-    }
-}
-#[macro_export]
-macro_rules! mint {
-    ($x:expr) => {
-        ModInt::new($x, MOD_1000000007)
-    };
-}
-impl std::iter::Sum for ModInt {
-    fn sum<I>(iter: I) -> Self
-    where
-        I: Iterator<Item = ModInt>,
-    {
-        let mut r = mint!(0);
-        for x in iter {
-            r = r + x
-        }
-        r
     }
 }
 

@@ -1,8 +1,8 @@
 /// Graph - Bellman-Ford
-use crate::algebra::group::*;
+use crate::algebra::group_additive::*;
 use crate::algebra::hyper::*;
 
-pub fn bellman_ford<X: Copy + Group + PartialOrd>(
+pub fn bellman_ford<X: Copy + AGroup + PartialOrd>(
     s: usize,
     t: usize,
     neigh: &[Vec<(usize, X)>],

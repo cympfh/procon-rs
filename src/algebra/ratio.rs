@@ -1,6 +1,10 @@
 /// Algebra - Ratio Numbers
-use crate::algebra::group::*;
+use crate::agroup; // IGNORE
+use crate::algebra::field::*;
+use crate::algebra::group_additive::*;
+use crate::algebra::monoid::*;
 use crate::algebra::ring::*;
+use crate::monoid; // IGNORE
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Ratio(i64, i64); // Normalized (numerator / denominator)
@@ -42,24 +46,24 @@ impl Ratio {
         a / Self::gcd(a, b) * b
     }
 }
-impl std::ops::Neg for Ratio {
-    type Output = Self;
-    fn neg(self) -> Self {
-        Ratio(-self.0, self.1)
-    }
-}
-impl std::ops::Add for Ratio {
-    type Output = Self;
-    fn add(self, other: Self) -> Self {
+agroup! {
+    Ratio;
+    zero = Ratio(0, 1);
+    add(self, other) = {
         let num = Self::lcm(self.1, other.1);
         Ratio::new(self.0 * num / self.1 + other.0 * num / other.1, num)
-    }
+    };
+    neg(self) = {
+        Ratio(-self.0, self.1)
+    };
 }
-impl std::ops::AddAssign<Ratio> for Ratio {
-    fn add_assign(&mut self, other: Self) {
-        *self = *self + other;
-    }
+monoid! {
+    Ratio;
+    one = Ratio(1, 1);
+    mul(self, other) = { Self::new(self.0 * other.0, self.1 * other.1) }
 }
+impl Ring for Ratio {}
+
 impl std::ops::Add<i64> for Ratio {
     type Output = Self;
     fn add(self, z: i64) -> Self {
@@ -72,17 +76,6 @@ impl std::ops::AddAssign<i64> for Ratio {
         self.normalize();
     }
 }
-impl std::ops::Sub for Ratio {
-    type Output = Self;
-    fn sub(self, other: Self) -> Self {
-        self + (-other)
-    }
-}
-impl std::ops::SubAssign<Ratio> for Ratio {
-    fn sub_assign(&mut self, other: Self) {
-        *self = *self - other;
-    }
-}
 impl std::ops::Sub<i64> for Ratio {
     type Output = Self;
     fn sub(self, z: i64) -> Self {
@@ -92,12 +85,6 @@ impl std::ops::Sub<i64> for Ratio {
 impl std::ops::SubAssign<i64> for Ratio {
     fn sub_assign(&mut self, z: i64) {
         *self += -z;
-    }
-}
-impl std::ops::Mul for Ratio {
-    type Output = Self;
-    fn mul(self, other: Self) -> Self {
-        Self::new(self.0 * other.0, self.1 * other.1)
     }
 }
 impl std::ops::Mul<i64> for Ratio {
@@ -118,6 +105,7 @@ impl std::ops::Div for Ratio {
         Self::new(self.0 * other.1, self.1 * other.0)
     }
 }
+impl Field for Ratio {}
 impl std::ops::Div<i64> for Ratio {
     type Output = Self;
     fn div(self, other: i64) -> Self {
@@ -128,21 +116,6 @@ impl std::ops::DivAssign<i64> for Ratio {
     fn div_assign(&mut self, z: i64) {
         self.1 *= z;
         self.normalize();
-    }
-}
-impl std::iter::Sum for Ratio {
-    fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
-        iter.fold(Ratio::zero(), std::ops::Add::add)
-    }
-}
-impl Group for Ratio {
-    fn zero() -> Self {
-        Ratio(0, 1)
-    }
-}
-impl Ring for Ratio {
-    fn one() -> Self {
-        Ratio(1, 1)
     }
 }
 impl PartialOrd for Ratio {

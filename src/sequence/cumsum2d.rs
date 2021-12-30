@@ -1,9 +1,9 @@
-/// Sequence - Cumulative Summation 2D
-use crate::algebra::group::*;
+/// Sequence - Cumulative Summation 2D of Additive Group (+, 0)
+use crate::algebra::group_additive::*;
 
 #[derive(Debug)]
 pub struct Cumsum2d<T>(Vec<Vec<T>>);
-impl<T: Copy + Group> Cumsum2d<T> {
+impl<T: Copy + AGroup> Cumsum2d<T> {
     pub fn new(data: &Vec<Vec<T>>) -> Self {
         let h = data.len();
         let w = data[0].len();
@@ -39,13 +39,13 @@ mod test_cumsum {
     fn naiiv(
         tate: std::ops::Range<usize>,
         yoko: std::ops::Range<usize>,
-        xs: &Vec<Vec<i32>>,
-    ) -> i32 {
-        tate.map(|i| yoko.clone().map(|j| xs[i][j]).sum::<i32>())
-            .sum::<i32>()
+        xs: &Vec<Vec<i64>>,
+    ) -> i64 {
+        tate.map(|i| yoko.clone().map(|j| xs[i][j]).sum::<i64>())
+            .sum::<i64>()
     }
 
-    fn autocheck(xs: Vec<Vec<i32>>) {
+    fn autocheck(xs: Vec<Vec<i64>>) {
         let h = xs.len();
         let w = xs[0].len();
         let cs = Cumsum2d::new(&xs);

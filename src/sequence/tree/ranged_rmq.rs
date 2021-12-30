@@ -1,6 +1,7 @@
 /// Sequence - Lazy Segment Tree - Ranged RMQ
 use crate::algebra::act_assign::*;
-use crate::algebra::monoid_minmax::*;
+use crate::algebra::monoid_max::*;
+use crate::algebra::monoid_min::*;
 use crate::sequence::tree::lazy_segment_tree::*;
 
 pub type RangedRMaxQ<X> = LazySegmentTree<MaxInt<X>, Assign<MaxInt<X>>>;

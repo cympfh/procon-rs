@@ -1,8 +1,8 @@
 /// Graph - Dijkstra
-use crate::algebra::group::*;
+use crate::algebra::group_additive::*;
 use crate::algebra::hyper::*;
 
-pub fn dijkstra<Cost: Copy + Group + Ord>(
+pub fn dijkstra<Cost: Copy + AGroup + Ord>(
     s: usize,
     neigh: &Vec<Vec<(usize, Cost)>>,
 ) -> Vec<Hyper<Cost>> {
@@ -31,7 +31,7 @@ mod test_dijkstra {
 
     #[test]
     fn test_circle_undirected() {
-        type Cost = i32;
+        type Cost = i64;
         let neigh: Vec<Vec<(usize, Cost)>> = vec![
             vec![(1, 1), (4, 1)],
             vec![(2, 1), (0, 1)],
@@ -45,7 +45,7 @@ mod test_dijkstra {
 
     #[test]
     fn test_circle_directed() {
-        type Cost = i32;
+        type Cost = i64;
         let neigh: Vec<Vec<(usize, Cost)>> = vec![
             vec![(1, 1)],
             vec![(2, 1)],
@@ -59,7 +59,7 @@ mod test_dijkstra {
 
     #[test]
     fn test_unconnected() {
-        type Cost = i32;
+        type Cost = i64;
         let neigh: Vec<Vec<(usize, Cost)>> = vec![
             vec![(1, 1)],
             vec![(0, 1)],

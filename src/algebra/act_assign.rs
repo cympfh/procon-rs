@@ -1,15 +1,17 @@
 /// Algebra - Assign Monoidal Act
 use crate::algebra::act::*;
 use crate::algebra::monoid::*;
+use crate::monoid; // IGNORE
 
 #[derive(Debug, Clone, Copy)]
 pub enum Assign<X> {
     Some(X),
     None,
 }
-impl<X> std::ops::Mul for Assign<X> {
-    type Output = Self;
-    fn mul(self, other: Self) -> Self {
+monoid! {
+    Assign<X> where [X];
+    one = Assign::None;
+    mul(self, other) = {
         match (self, &other) {
             (x, Assign::None) => x,
             _ => other,
@@ -24,14 +26,9 @@ impl<X: Copy> Act<X> for Assign<X> {
         }
     }
 }
-impl<X: Copy> Monoid for Assign<X> {
-    fn unit() -> Self {
-        Assign::None
-    }
-}
 
 #[cfg(test)]
-mod test_ratio {
+mod test_act_assign {
     use crate::algebra::act_assign::*;
     #[test]
     fn it_works() {

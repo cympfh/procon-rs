@@ -1,9 +1,9 @@
-/// Sequence - Cumulative Summation 1D
-use crate::algebra::group::*;
+/// Sequence - Cumulative Summation 1D of Additive Group (+, 0)
+use crate::algebra::group_additive::*;
 
 #[derive(Debug)]
 pub struct Cumsum1d<T>(Vec<T>);
-impl<T: Copy + Group> Cumsum1d<T> {
+impl<T: Copy + AGroup> Cumsum1d<T> {
     pub fn new(xs: &Vec<T>) -> Self {
         let mut ac = T::zero();
         let mut arr = vec![T::zero(); xs.len()];
@@ -35,11 +35,11 @@ impl<T: Copy + Group> Cumsum1d<T> {
 mod test_cumsum {
     use crate::sequence::cumsum1d::*;
 
-    fn naiiv(range: std::ops::Range<usize>, xs: &Vec<i32>) -> i32 {
+    fn naiiv(range: std::ops::Range<usize>, xs: &Vec<i64>) -> i64 {
         range.map(|i| xs[i]).sum()
     }
 
-    fn autocheck(xs: Vec<i32>) {
+    fn autocheck(xs: Vec<i64>) {
         let n = xs.len();
         let cs = Cumsum1d::new(&xs);
         for left in 0..n {

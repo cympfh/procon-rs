@@ -5,7 +5,7 @@ use crate::algebra::monoid::*;
 use crate::monoid; // IGNORE
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Add<X: AGroup>(X);
+pub struct Add<X: AGroup>(pub X);
 monoid! {
     Add<X> where [X:AGroup];
     one = Add(X::zero());

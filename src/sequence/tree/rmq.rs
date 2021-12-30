@@ -1,5 +1,5 @@
-use crate::algebra::monoid_max::*;
 /// Sequence - Range Maximum/Minimum Query
+use crate::algebra::monoid_max::*;
 use crate::algebra::monoid_min::*;
 use crate::sequence::tree::segment_tree::*;
 

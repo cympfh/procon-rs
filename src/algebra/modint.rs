@@ -81,7 +81,7 @@ agroup! {
 }
 monoid! {
     ModInt;
-    one = mint!(0);
+    one = mint!(1);
     mul(self, other) = { ModInt::new(self.0 * other.0, self.1) };
 }
 ring! {

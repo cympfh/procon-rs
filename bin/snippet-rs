@@ -85,7 +85,7 @@ import() {
   # show body
   cat "${BASEDIR}${1}.rs" |
     sed '/^use crate.*/d' |
-    awk 'NR>1 || /^./' |
+    awk 'NR >= 3 || /^./' |
     delete_test
 
   echo
@@ -96,5 +96,5 @@ if [ -z "$SELECT" ]; then
   exit
 fi
 
-import "${SELECT}"
+import "${SELECT}" | cat -s
 rm ${IMPORTNGS}

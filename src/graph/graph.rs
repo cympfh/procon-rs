@@ -32,6 +32,25 @@ impl Graph {
         self.data[u].push(v);
         self.cost[u].push(cost);
     }
+    /// adj list
+    pub fn neigh(&self, u: usize) -> Vec<usize> {
+        self.data[u].to_vec()
+    }
+    /// adj list + cost
+    pub fn neigh_with_cost(&self, u: usize) -> Vec<(usize, Hyper<i64>)> {
+        self.data[u]
+            .iter()
+            .cloned()
+            .zip(self.cost[u].iter().cloned())
+            .collect()
+    }
+    /// edges have been costed?
+    pub fn is_costed(&self) -> bool {
+        self.cost.iter().any(|v| !v.is_empty())
+    }
+    pub fn reverse(&self) -> Self {
+        -(self.clone())
+    }
     /// undirected -> directed rooted tree
     pub fn to_rooted(&self, root: usize) -> Self {
         let mut r = Graph::new(self.n);
@@ -52,24 +71,16 @@ impl Graph {
         }
         r
     }
-    /// adj list
-    pub fn neigh(&self, u: usize) -> Vec<usize> {
-        self.data[u].to_vec()
-    }
-    /// adj list + cost
-    pub fn neigh_with_cost(&self, u: usize) -> Vec<(usize, Hyper<i64>)> {
-        self.data[u]
-            .iter()
-            .cloned()
-            .zip(self.cost[u].iter().cloned())
-            .collect()
-    }
-    /// edges have been costed?
-    pub fn is_costed(&self) -> bool {
-        self.cost.iter().any(|v| !v.is_empty())
-    }
-    pub fn reverse(&self) -> Self {
-        -(self.clone())
+    /// -> adj matrix
+    pub fn to_matrix(&self) -> Vec<Vec<Hyper<i64>>> {
+        let mut mat = vec![vec![Hyper::Inf; self.n]; self.n];
+        for u in 0..self.n {
+            for (v, cost) in self.neigh_with_cost(u) {
+                mat[u][v] = mat[u][v].min(cost);
+            }
+            mat[u][u] = Hyper::Real(0);
+        }
+        mat
     }
 }
 impl std::ops::Neg for Graph {
@@ -127,5 +138,34 @@ mod test_graph {
         assert_eq!(g_rev.neigh_with_cost(0), vec![]);
         assert_eq!(g_rev.neigh_with_cost(1), vec![(0, Real(2))]);
         assert_eq!(g_rev.neigh_with_cost(2), vec![(1, Real(3))]);
+    }
+
+    #[test]
+    fn test_matrix() {
+        let mut g = Graph::new(3);
+        g.uedge(0, 1);
+        g.uedge(0, 2);
+        let mat = g.to_matrix();
+        assert_eq!(
+            mat,
+            vec![
+                vec![Real(0), Real(1), Real(1)],
+                vec![Real(1), Real(0), Inf],
+                vec![Real(1), Inf, Real(0)],
+            ]
+        );
+
+        let mut g = Graph::new(3);
+        g.dedge_with_cost(0, 2, Real(5));
+        g.dedge_with_cost(1, 2, Real(7));
+        let mat = g.to_matrix();
+        assert_eq!(
+            mat,
+            vec![
+                vec![Real(0), Inf, Real(5)],
+                vec![Inf, Real(0), Real(7)],
+                vec![Inf, Inf, Real(0)],
+            ]
+        );
     }
 }

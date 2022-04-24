@@ -15,7 +15,7 @@ pub const MOD_998244353: i64 = 998_244_353;
 #[macro_export]
 macro_rules! mint {
     ($x:expr) => {
-        ModInt::new($x, MOD_1000000007)
+        ModInt::new($x, MOD_998244353)
     };
 }
 

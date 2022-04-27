@@ -1,4 +1,4 @@
-/// misc - Coodinate Compression (座標圧縮)
+/// misc - Coodinate (Index) Compression (座標圧縮)
 pub fn coodinate_compression<T: Clone + Ord>(xs: &Vec<T>) -> Vec<usize> {
     let xset: std::collections::BTreeSet<T> = xs.iter().cloned().collect();
     let xmap: std::collections::BTreeMap<&T, usize> =

@@ -3,7 +3,13 @@
 usage() {
   cat <<EOM
 SYNOPSIS
-  bin/snippet-rs --ref <REFERENCE_FILE>
+  bin/snippet-rs [OPTIONS]
+
+OPTIONS
+  --ref <REFERENCE_FILE>
+    Avoid duplicated import
+  --clear-cache
+    Ignore ~/.cache/snippet-rs
 EOM
   exit
 }
@@ -28,6 +34,7 @@ delete_test() {
 BASEDIR=$(dirname $0)/../src/
 REF=/dev/null
 IMPORTNGS=$(mktemp)
+CACHEFILE=~/.cache/snippet-rs
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -37,6 +44,9 @@ while [ $# -gt 0 ]; do
       ;;
     --help | -h )
       usage
+      ;;
+    --clear-cache )
+      rm $CACHEFILE
       ;;
   esac
 done
@@ -91,7 +101,11 @@ import() {
   echo
 }
 
-SELECT="$(list | peco | sed 's/ .*//g')"
+if [ ! -s $CACHEFILE ]; then
+  list > $CACHEFILE
+fi
+
+SELECT="$(cat $CACHEFILE | peco | sed 's/ .*//g')"
 if [ -z "$SELECT" ]; then
   exit
 fi

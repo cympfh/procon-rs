@@ -16,7 +16,7 @@ EOM
 
 sanity_check() {
   err=0
-  for dep in peco; do
+  for dep in fzf; do
     if ! which $dep >/dev/null; then
       echo "Please install $dep"
       err=1
@@ -105,7 +105,7 @@ if [ ! -s $CACHEFILE ]; then
   list > $CACHEFILE
 fi
 
-SELECT="$(cat $CACHEFILE | peco | sed 's/ .*//g')"
+SELECT="$(cat $CACHEFILE | fzf --border | sed 's/ .*//g')"
 if [ -z "$SELECT" ]; then
   exit
 fi

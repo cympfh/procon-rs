@@ -189,7 +189,7 @@ mod test_modint {
 
         m -= 1;
         assert_eq!(m, mint!(-1));
-        assert_eq!(m.unwrap(), MOD_1000000007 - 1);
+        assert_eq!(m.unwrap(), MOD_998244353 - 1);
 
         m *= 2;
         assert_eq!(m, mint!(-2));

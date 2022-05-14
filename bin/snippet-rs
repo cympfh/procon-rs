@@ -44,9 +44,11 @@ while [ $# -gt 0 ]; do
       ;;
     --help | -h )
       usage
+      exit
       ;;
     --clear-cache )
       rm $CACHEFILE
+      shift
       ;;
   esac
 done

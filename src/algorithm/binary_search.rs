@@ -1,59 +1,42 @@
-/// Algorithm - Binary Search
-pub trait Integer
-where
-    Self: std::marker::Sized,
-{
-    fn close(range: std::ops::Range<Self>) -> bool;
-    fn middle(range: std::ops::Range<Self>) -> Self;
+/// Algorithm - Binary Search (lowerbound)
+pub trait CompleteIdx: Copy {
+    fn mid(self, other: Self) -> Self;
 }
-macro_rules! define_integer {
-    ($type:ty, $range:ident, $close_condition:expr, $middle_point:expr) => {
-        impl Integer for $type {
-            fn close($range: std::ops::Range<Self>) -> bool {
-                $close_condition
-            }
-            fn middle($range: std::ops::Range<Self>) -> Self {
-                $middle_point
-            }
+#[macro_export]
+macro_rules! completeidx {
+    ( $type:ty, mid($self:ident, $other:ident) = $code:block ) => {
+        impl CompleteIdx for $type {
+            fn mid($self, $other: Self) -> Self { $code }
         }
     };
 }
-define_integer!(usize, r, r.start + 1 >= r.end, (r.start + r.end) / 2);
-define_integer!(u32, r, r.start + 1 >= r.end, (r.start + r.end) / 2);
-define_integer!(u64, r, r.start + 1 >= r.end, (r.start + r.end) / 2);
-define_integer!(u128, r, r.start + 1 >= r.end, (r.start + r.end) / 2);
-define_integer!(i32, r, r.start + 1 >= r.end, (r.start + r.end) / 2);
-define_integer!(i64, r, r.start + 1 >= r.end, (r.start + r.end) / 2);
-define_integer!(i128, r, r.start + 1 >= r.end, (r.start + r.end) / 2);
-define_integer!(
-    f32,
-    r,
-    r.start + 0.00000001 >= r.end,
-    (r.start + r.end) / 2.0
-);
-define_integer!(
-    f64,
-    r,
-    r.start + 0.00000001 >= r.end,
-    (r.start + r.end) / 2.0
-);
+completeidx! { usize, mid(self, other) = { (self + other) / 2 }}
+completeidx! { u128, mid(self, other) = { (self + other) / 2 }}
+completeidx! { u64, mid(self, other) = { (self + other) / 2 }}
+completeidx! { f64, mid(self, other) = { (self + other) / 2.0 }}
 
-// the minimum index in range s.t. prop holds
-pub fn binsearch<X: Integer + Copy>(range: std::ops::Range<X>, prop: &dyn Fn(X) -> bool) -> X {
-    if prop(range.start) {
-        range.start
-    } else {
-        let mut left = range.start;
-        let mut right = range.end;
-        while !X::close(left..right) {
-            let mid = X::middle(left..right);
-            if prop(mid) {
-                right = mid;
-            } else {
-                left = mid;
-            }
+pub fn lowerbound<T: CompleteIdx>(r: std::ops::Range<T>, cond: &dyn Fn(T) -> bool) -> Option<T> {
+    if cond(r.start) {
+        return Some(r.start);
+    }
+    // TODO(from 1.47.0)
+    // if r.is_empty() { return None }
+    let mut left = r.start;
+    let mut right = r.end;
+    let mut ok = false;
+    for _ in 0..100 {
+        let mid = T::mid(left, right);
+        if cond(mid) {
+            right = mid;
+            ok = true;
+        } else {
+            left = mid;
         }
-        right
+    }
+    if ok {
+        Some(right)
+    } else {
+        None
     }
 }
 
@@ -64,8 +47,15 @@ mod test_binary_search {
     #[test]
     fn search_bound() {
         let v: Vec<i32> = (0..100).collect();
-        assert_eq!(binsearch(0..100, &|i| v[i] > 50), 51);
-        assert_eq!(binsearch(0..100, &|i| v[i] >= 0), 0);
-        assert_eq!(binsearch(0..100, &|i| v[i] > 100), 100);
+        assert_eq!(lowerbound(0..100, &|i| v[i] > 50), Some(51));
+        assert_eq!(lowerbound(0..100, &|i| v[i] >= 0), Some(0));
+        assert_eq!(lowerbound(0..100, &|i| v[i] >= 99), Some(99));
+        assert_eq!(lowerbound(0..100, &|i| v[i] >= 100), None);
+    }
+
+    #[test]
+    fn search_on_real_number() {
+        let x: f64 = lowerbound(0.0..2.0, &|x| x * x >= 2.0).unwrap();
+        assert!((x * x - 2.0).abs() < 0.00001);
     }
 }

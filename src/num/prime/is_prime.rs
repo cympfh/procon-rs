@@ -1,3 +1,4 @@
+/// Prime Numbers - Is a prime number?
 use crate::num::prime::mrtest::*;
 
 pub fn is_prime(n: u64) -> bool {

@@ -9,11 +9,9 @@ pub mod hyper;
 pub mod matrix;
 pub mod modint;
 pub mod module;
-#[macro_use]
 pub mod monoid;
 pub mod monoid_max;
 pub mod monoid_min;
 pub mod monoid_sum;
 pub mod ratio;
 pub mod ring;
-pub mod total;

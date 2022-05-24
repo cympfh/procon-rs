@@ -53,12 +53,16 @@ while [ $# -gt 0 ]; do
   esac
 done
 
+heading() {
+  cat "$1" | awk '/\/\/\//{print;exit}'
+}
+
 list() {
   for f in $(find $BASEDIR -type f -name '*.rs' | grep -v '/lib.rs' | grep -v '/mod.rs'); do
     FNAME="$(
       echo $f | sed "s#$BASEDIR##g" | sed 's/\.rs//g'
     )"
-    HEAD="$(head -1 $BASEDIR/$FNAME.rs)"
+    HEAD="$(heading $BASEDIR/$FNAME.rs)"
     case "$HEAD" in
       ///* )
         printf "%-32s %s\n" "$FNAME" "$HEAD"

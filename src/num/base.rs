@@ -24,12 +24,7 @@ pub trait Num: Nat + std::ops::Neg<Output = Self> {}
 
 #[macro_export]
 macro_rules! def_nat {
-    (
-        $ty:ty;
-        zero = $zero:expr;
-        one = $one:expr
-        $(;)*
-    ) => {
+    ($ty:ty; zero = $zero:expr; one = $one:expr $(;)*) => {
         impl Nat for $ty {
             fn zero() -> Self {
                 $zero
@@ -40,20 +35,13 @@ macro_rules! def_nat {
         }
     };
 }
-
 #[macro_export]
 macro_rules! def_num {
-    (
-        $ty:ty;
-        zero = $zero:expr;
-        one = $one:expr
-        $(;)*
-    ) => {
+    ($ty:ty; zero = $zero:expr; one = $one:expr $(;)*) => {
         def_nat!($ty; zero = $zero; one = $one);
         impl Num for $ty {}
     };
 }
-
 def_nat! { usize; zero = 0; one = 1 }
 def_nat! { u64; zero = 0; one = 1 }
 def_nat! { u128; zero = 0; one = 1 }

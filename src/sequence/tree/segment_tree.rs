@@ -1,9 +1,7 @@
 /// Sequence - Segment Tree
 use crate::algebra::monoid::*;
 
-#[derive(Debug, Clone)]
 pub struct SegmentTree<X> {
-    length: usize,       // of leaves
     length_upper: usize, // power of 2
     size: usize,         // of nodes
     data: Vec<X>,
@@ -23,7 +21,6 @@ impl<X: Copy + Monoid> SegmentTree<X> {
         let size = length_upper * 2 - 1;
         let data = vec![X::one(); size];
         SegmentTree {
-            length,
             length_upper,
             size,
             data,

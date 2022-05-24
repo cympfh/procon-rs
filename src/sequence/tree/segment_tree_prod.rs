@@ -1,5 +1,4 @@
 /// Sequence - Segment Tree of Prod
-use crate::algebra::monoid::*;
 use crate::sequence::tree::segment_tree::*;
 
 pub type SegmentTreeProd = SegmentTree<i64>;

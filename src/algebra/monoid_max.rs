@@ -1,5 +1,6 @@
 /// Algebra - Monoid - MaxInt
 use crate::algebra::monoid::*;
+use crate::monoid; // IGNORE
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum MaxInt<X> {

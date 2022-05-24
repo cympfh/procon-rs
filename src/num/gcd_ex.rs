@@ -3,7 +3,7 @@
 /// - Args: x, y
 /// - Returns: (a, b, gcd(x, y))
 use crate::num::base::*;
-pub fn gcd_ex<N: Int>(x: N, y: N) -> (N, N, N) {
+pub fn gcd_ex<N: Nat>(x: N, y: N) -> (N, N, N) {
     let mut r0 = x;
     let mut a0 = N::one();
     let mut b0 = N::zero();
@@ -28,7 +28,6 @@ mod test_gcd {
 
     #[test]
     fn it_works() {
-        assert_eq!(gcd_ex(3_i32, 5), (2, -1, 1));
         assert_eq!(gcd_ex(3_i64, 6), (1, 0, 3));
     }
 }

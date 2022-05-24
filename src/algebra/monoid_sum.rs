@@ -1,5 +1,6 @@
 /// Algebra - Def of Monoid (i64, +)
 use crate::algebra::monoid::*;
+use crate::monoid; // IGNORE
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Sum(pub i64);

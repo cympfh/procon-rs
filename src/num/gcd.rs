@@ -16,5 +16,6 @@ mod test_gcd {
     fn it_works() {
         assert_eq!(gcd(10_usize, 15), 5);
         assert_eq!(gcd(10_u64, 15), 5);
+        assert_eq!(gcd(10_u128, 15), 5);
     }
 }

@@ -56,6 +56,7 @@ macro_rules! def_num {
 
 def_nat! { usize; zero = 0; one = 1 }
 def_nat! { u64; zero = 0; one = 1 }
+def_nat! { u128; zero = 0; one = 1 }
 def_num! { i64; zero = 0; one = 1 }
 def_num! { i128; zero = 0; one = 1 }
 def_num! { Float; zero = Float(0.0); one = Float(1.0); }

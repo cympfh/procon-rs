@@ -1,4 +1,5 @@
 pub mod bit;
+pub mod bit_cumulative;
 pub mod lazy_segment_tree;
 pub mod ranged_add_rmq;
 pub mod ranged_add_segment_tree_sum;

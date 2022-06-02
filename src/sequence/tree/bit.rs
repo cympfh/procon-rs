@@ -1,15 +1,15 @@
-/// Sequence - Binary Indexed Tree (Fenwick Tree) of Additive Group (+, 0)
 use crate::algebra::group_additive::*;
 
+/// Sequence - Binary Indexed Tree (Fenwick Tree) of Additive Group (+, 0)
 pub struct BIT<X> {
     size: usize,
     array: Vec<X>,
 }
 impl<X: Copy + AGroup> BIT<X> {
-    pub fn new(n: usize) -> Self {
+    pub fn new(size: usize) -> Self {
         BIT {
-            size: n,
-            array: vec![X::zero(); n + 1],
+            size,
+            array: vec![X::zero(); size + 1],
         }
     }
     pub fn add(&mut self, idx: usize, w: X) {
@@ -21,7 +21,7 @@ impl<X: Copy + AGroup> BIT<X> {
         }
     }
     /// sum of [0, idx)
-    fn sum_up(&self, idx: usize) -> X {
+    pub fn sum_up(&self, idx: usize) -> X {
         let mut sum = X::zero();
         let mut x = idx;
         while x > 0 {

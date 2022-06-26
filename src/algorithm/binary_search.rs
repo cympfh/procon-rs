@@ -12,7 +12,9 @@ macro_rules! completeidx {
 }
 completeidx! { usize, mid(self, other) = { (self + other) / 2 }}
 completeidx! { u128, mid(self, other) = { (self + other) / 2 }}
+completeidx! { i128, mid(self, other) = { (self + other) / 2 }}
 completeidx! { u64, mid(self, other) = { (self + other) / 2 }}
+completeidx! { i64, mid(self, other) = { (self + other) / 2 }}
 completeidx! { f64, mid(self, other) = { (self + other) / 2.0 }}
 
 pub fn lowerbound<T: CompleteIdx>(r: std::ops::Range<T>, cond: &dyn Fn(T) -> bool) -> Option<T> {

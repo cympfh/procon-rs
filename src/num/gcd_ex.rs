@@ -4,22 +4,12 @@
 /// - Returns: (a, b, gcd(x, y))
 use crate::num::base::*;
 pub fn gcd_ex<N: Nat>(x: N, y: N) -> (N, N, N) {
-    let mut r0 = x;
-    let mut a0 = N::one();
-    let mut b0 = N::zero();
-    let mut r = y;
-    let mut a = N::zero();
-    let mut b = N::one();
-    while r > N::zero() {
-        let (r2, a2, b2) = (r0 % r, a0 - r0 / r * a, b0 - r0 / r * b);
-        r0 = r;
-        r = r2;
-        a0 = a;
-        a = a2;
-        b0 = b;
-        b = b2;
+    if y == N::zero() {
+        (N::one(), N::zero(), x)
+    } else {
+        let (p, q, g) = gcd_ex(y, x % y);
+        (q, p - q * (x / y), g)
     }
-    (a0, b0, r0)
 }
 
 #[cfg(test)]
@@ -27,7 +17,18 @@ mod test_gcd {
     use crate::num::gcd_ex::*;
 
     #[test]
-    fn it_works() {
+    fn test_samples() {
         assert_eq!(gcd_ex(3_i64, 6), (1, 0, 3));
+        assert_eq!(gcd_ex(3_i64, 1), (0, 1, 1));
+    }
+
+    #[test]
+    fn test_equality() {
+        for x in -4..=4_i64 {
+            for y in -4..=4_i64 {
+                let (p, q, g) = gcd_ex(x, y);
+                assert_eq!(p * x + q * y, g);
+            }
+        }
     }
 }

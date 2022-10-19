@@ -27,6 +27,11 @@ impl std::ops::Div<i128> for IntPoint {
         Self(self.0 / k, self.1 / k)
     }
 }
+impl IntPoint {
+    pub fn cross(&self, other: IntPoint) -> i128 {
+        self.0 * other.1 - self.1 * other.0
+    }
+}
 
 #[cfg(test)]
 mod test_int_point {
@@ -51,5 +56,13 @@ mod test_int_point {
     #[test]
     fn test_div() {
         assert_eq!(IntPoint(1, 2) / -2, IntPoint(0, -1));
+    }
+
+    #[test]
+    fn test_cross() {
+        assert_eq!(IntPoint(1, 1).cross(IntPoint(2, 2)), 0);
+        assert_eq!(IntPoint(1, 0).cross(IntPoint(2, 2)), 2);
+        assert_eq!(IntPoint(0, 1).cross(IntPoint(2, 2)), -2);
+        assert_eq!(IntPoint(2, 1).cross(IntPoint(-1, 2)), 5);
     }
 }

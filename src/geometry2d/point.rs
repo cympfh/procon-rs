@@ -1,4 +1,6 @@
 /// Geometry2D - Definition of Point
+use crate::almost_equal; // IGNORE
+
 #[derive(Debug, Clone, Copy)]
 pub struct Point(pub f64, pub f64);
 
@@ -11,6 +13,9 @@ impl Point {
     }
     pub fn norm(&self) -> f64 {
         (*self * *self).sqrt()
+    }
+    pub fn quadrance(&self) -> f64 {
+        *self * *self
     }
     pub fn det(&self, other: &Point) -> f64 {
         self.0 * other.1 - self.1 * other.0
@@ -26,8 +31,7 @@ impl Point {
 }
 impl PartialEq for Point {
     fn eq(&self, other: &Point) -> bool {
-        let eps = 1e-6;
-        (self.0 - other.0).abs() < eps && (self.1 - other.1).abs() < eps
+        almost_equal!(self.0, other.0) && almost_equal!(self.1, other.1)
     }
     fn ne(&self, other: &Point) -> bool {
         !(self == other)
@@ -77,6 +81,13 @@ impl std::ops::Div<f64> for Point {
     fn div(self, other: f64) -> Point {
         Point(self.0 / other, self.1 / other)
     }
+}
+
+#[macro_export]
+macro_rules! almost_equal {
+    ($x:expr, $y:expr) => {
+        ($x - $y).abs() < 1e-6
+    };
 }
 
 #[cfg(test)]

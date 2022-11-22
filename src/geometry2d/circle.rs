@@ -40,7 +40,6 @@ impl Circle {
         let d2 = (self.center - other.center).quadrance();
         let r2 = (self.radius + other.radius).powi(2);
         let l2 = (self.radius - other.radius).powi(2);
-        let eps = 1e-6;
         if self == other {
             Equal
         } else if almost_equal!(d2, r2) || almost_equal!(d2, l2) {

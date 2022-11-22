@@ -3,6 +3,21 @@
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct IntPoint(pub i128, pub i128);
 
+impl IntPoint {
+    pub fn new(x: i128, y: i128) -> Self {
+        Self(x, y)
+    }
+    pub fn zero() -> Self {
+        Self(0, 0)
+    }
+    pub fn cross(&self, other: IntPoint) -> i128 {
+        self.0 * other.1 - self.1 * other.0
+    }
+    pub fn quadrance(&self) -> i128 {
+        self.0.pow(2) + self.1.pow(2)
+    }
+}
+
 impl std::ops::Add<IntPoint> for IntPoint {
     type Output = Self;
     fn add(self, other: IntPoint) -> Self {
@@ -25,11 +40,6 @@ impl std::ops::Div<i128> for IntPoint {
     type Output = Self;
     fn div(self, k: i128) -> Self {
         Self(self.0 / k, self.1 / k)
-    }
-}
-impl IntPoint {
-    pub fn cross(&self, other: IntPoint) -> i128 {
-        self.0 * other.1 - self.1 * other.0
     }
 }
 

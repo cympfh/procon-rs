@@ -42,6 +42,7 @@ pub enum IntCircleIntersection {
     Sub,              // self is contained by the other
     Sup,              // self contains the other
     Intersect(usize), // intersection with `n` points
+    Outer,            // no join
 }
 
 impl IntCircle {
@@ -61,7 +62,7 @@ impl IntCircle {
         } else if d2 < r2 {
             Intersect(2)
         } else {
-            Intersect(0)
+            Outer
         }
     }
 }
@@ -96,8 +97,8 @@ mod test_int_circle {
 
         let c = IntCircle::new(IntPoint(0, 0), 5);
         let d = IntCircle::new(IntPoint(7, 0), 1);
-        assert_eq!(c.intersection(&d), IntCircleIntersection::Intersect(0));
-        assert_eq!(d.intersection(&c), IntCircleIntersection::Intersect(0));
+        assert_eq!(c.intersection(&d), IntCircleIntersection::Outer);
+        assert_eq!(d.intersection(&c), IntCircleIntersection::Outer);
 
         let c = IntCircle::new(IntPoint(0, 0), 6);
         let d = IntCircle::new(IntPoint(7, 0), 2);

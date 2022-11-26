@@ -15,3 +15,4 @@ pub mod monoid_min;
 pub mod monoid_sum;
 pub mod ratio;
 pub mod ring;
+pub mod symmetric;

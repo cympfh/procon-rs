@@ -17,7 +17,7 @@ impl<K: Eq + std::hash::Hash> MultiSet<K> {
     pub fn keys(&self) -> std::collections::hash_map::Keys<K, usize> {
         self.data.keys()
     }
-    pub fn add(&mut self, item: K) {
+    pub fn insert(&mut self, item: K) {
         match self.data.get(&item) {
             None => self.data.insert(item, 1),
             Some(&c) => self.data.insert(item, c + 1),
@@ -35,6 +35,9 @@ impl<K: Eq + std::hash::Hash> MultiSet<K> {
     pub fn uniq_size(&self) -> usize {
         self.data.len()
     }
+    pub fn len(&self) -> usize {
+        self.size
+    }
 }
 
 #[cfg(test)]
@@ -50,13 +53,13 @@ mod test_multiset {
         }
         use E::*;
         let mut c = MultiSet::new();
-        c.add(A);
+        c.insert(A);
         assert!(c.size == 1);
         assert!(c.uniq_size() == 1);
-        c.add(A);
+        c.insert(A);
         assert!(c.size == 2);
         assert!(c.uniq_size() == 1);
-        c.add(B);
+        c.insert(B);
         assert!(c.size == 3);
         assert!(c.uniq_size() == 2);
         c.remove(A);

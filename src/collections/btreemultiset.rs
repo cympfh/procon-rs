@@ -1,36 +1,46 @@
 /// collections - BTree MultiSet
 #[derive(Debug, Clone)]
-pub struct BTreeMultiSet<T>(std::collections::BTreeMap<T, usize>);
+pub struct BTreeMultiSet<T> {
+    data: std::collections::BTreeMap<T, usize>,
+    size: usize,
+}
 impl<T: Sized + Ord> BTreeMultiSet<T> {
     pub fn new() -> Self {
-        Self(std::collections::BTreeMap::new())
+        let data = std::collections::BTreeMap::new();
+        let size = 0;
+        Self { data, size }
     }
     pub fn insert(&mut self, item: T) {
-        self.0.entry(item).and_modify(|e| *e += 1).or_insert(1);
+        self.data.entry(item).and_modify(|e| *e += 1).or_insert(1);
+        self.size += 1;
     }
     pub fn get(&self, item: &T) -> Option<usize> {
-        self.0.get(item).cloned()
+        self.data.get(item).cloned()
     }
     pub fn remove(&mut self, item: T) {
-        if let Some(&c) = self.0.get(&item) {
+        if let Some(&c) = self.data.get(&item) {
             if c <= 1 {
-                self.0.remove(&item);
+                self.data.remove(&item);
             } else {
-                self.0.entry(item).and_modify(|e| *e -= 1);
+                self.data.entry(item).and_modify(|e| *e -= 1);
             }
+            self.size -= 1;
         }
+    }
+    pub fn len(&self) -> usize {
+        self.size
     }
     pub fn range<R: std::ops::RangeBounds<T>>(
         &self,
         range: R,
     ) -> std::collections::btree_map::Range<T, usize> {
-        self.0.range(range)
+        self.data.range(range)
     }
     pub fn min<R: std::ops::RangeBounds<T>>(&self, range: R) -> Option<&T> {
-        self.0.range(range).next().map(|(t, _)| t)
+        self.data.range(range).next().map(|(t, _)| t)
     }
     pub fn max<R: std::ops::RangeBounds<T>>(&self, range: R) -> Option<&T> {
-        self.0.range(range).next_back().map(|(t, _)| t)
+        self.data.range(range).next_back().map(|(t, _)| t)
     }
 }
 
@@ -52,5 +62,15 @@ mod test_btree_multiset {
         assert_eq!(None, c.get(&"hoge"));
         c.remove("hoge");
         assert_eq!(None, c.get(&"hoge"));
+    }
+
+    #[test]
+    fn test_multiset_len() {
+        let mut c = BTreeMultiSet::new();
+        c.insert(123);
+        c.insert(123);
+        assert_eq!(c.len(), 2);
+        c.remove(123);
+        assert_eq!(c.len(), 1);
     }
 }

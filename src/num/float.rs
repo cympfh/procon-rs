@@ -7,6 +7,21 @@ use crate::{agroup, monoid, ring}; // IGNORE
 #[derive(Debug, Clone, Copy)]
 pub struct Float(pub f64);
 
+impl Float {
+    pub fn abs(&self) -> Self {
+        Float(self.0.abs())
+    }
+    pub fn sin(&self) -> Self {
+        Float(self.0.sin())
+    }
+    pub fn cos(&self) -> Self {
+        Float(self.0.cos())
+    }
+    pub fn tan(&self) -> Self {
+        Float(self.0.tan())
+    }
+}
+
 agroup! {
     Float;
     zero = Float(0.0);

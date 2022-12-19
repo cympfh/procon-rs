@@ -13,13 +13,11 @@ pub fn gauss_jordan(a: Vec<Vec<Float>>, b: Vec<Float>) -> Option<Vec<Float>> {
         a[i].push(b[i]);
     }
     for i in 0..n {
-        eprintln!(">>> a = {:?}", &a);
         let pivot = (i..n).max_by_key(|&k| a[k][i].abs()).unwrap();
         a.swap(i, pivot);
         if a[i][i].abs() <= Float(1e-6) {
             return None;
         }
-        eprintln!(">>> swap, a = {:?}", &a);
         {
             let base = a[i][i];
             for j in i..=n {
@@ -36,7 +34,6 @@ pub fn gauss_jordan(a: Vec<Vec<Float>>, b: Vec<Float>) -> Option<Vec<Float>> {
                 a[ii][j] -= elim;
             }
         }
-        eprintln!(">>> elim, a = {:?}", &a);
     }
     Some((0..n).map(|i| a[i][n]).collect::<Vec<_>>())
 }

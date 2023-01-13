@@ -1,8 +1,7 @@
-/// String Search - Z Algorithm
-pub fn z(s: &str) -> Vec<usize> {
-    let s: Vec<char> = s.chars().collect();
+/// String - Z-Algorithm; String Search, Longest Common Prefix
+pub fn z<T: Eq>(s: &Vec<T>) -> Vec<usize> {
     let n = s.len();
-    let mut z = vec![0; n];
+    let mut z = vec![0; n + 1];
     z[0] = n;
     let mut i = 1;
     let mut j = 0;
@@ -29,7 +28,7 @@ pub fn z(s: &str) -> Vec<usize> {
 pub fn z_search(text: &str, pattern: &str) -> Option<usize> {
     let m = pattern.len();
     let t = pattern.to_string() + ";$" + text;
-    let table = z(&t);
+    let table = z(&t.chars().collect());
     for i in 0..text.len() {
         if table[i + m + 2] == m {
             return Some(i);
@@ -44,7 +43,11 @@ mod test_z {
     #[test]
     fn test_z() {
         use crate::string::z::z;
-        assert_eq!(z("abcaabc"), vec![7, 0, 0, 1, 3, 0, 0]);
+        assert_eq!(z(&"aaa".chars().collect()), vec![3, 2, 1, 0]);
+        assert_eq!(
+            z(&"abcaabc".chars().collect()),
+            vec![7, 0, 0, 1, 3, 0, 0, 0]
+        );
     }
 
     #[test]

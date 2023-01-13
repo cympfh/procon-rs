@@ -1,5 +1,6 @@
-/// String - Suffix Array (O(n log n log n))
+/// String - Suffix Array (Manber&Myers, O(n (log n)^2))
 pub fn suffix_array<T: Eq + Ord>(s: &[T]) -> Vec<usize> {
+    use std::collections::{BTreeMap, BTreeSet};
     let n = s.len();
     if n <= 1 {
         return (0..n).collect();
@@ -7,39 +8,31 @@ pub fn suffix_array<T: Eq + Ord>(s: &[T]) -> Vec<usize> {
     let mut sa: Vec<usize> = (0..n).collect();
     let mut rank: Vec<usize> = (0..n).collect();
     {
-        let mut ts: Vec<(usize, &T)> = s.iter().enumerate().collect();
-        ts.sort_by_key(|&item| item.1);
-        rank[ts[0].0] = 0;
-        for i in 1..n {
-            rank[ts[i].0] = rank[ts[i - 1].0] + if ts[i - 1].1 == ts[i].1 { 0 } else { 1 };
+        let alphabet: BTreeSet<&T> = s.iter().collect();
+        let chr: BTreeMap<_, usize> = alphabet
+            .iter()
+            .enumerate()
+            .map(|(idx, c)| (c, idx))
+            .collect();
+        for i in 0..n {
+            rank[i] = chr[&&&s[i]];
         }
     }
-    use std::cmp::Ordering;
-    fn compare(i: usize, j: usize, k: usize, rank: &Vec<usize>) -> Ordering {
-        match (rank[i], rank[j], rank.get(i + k), rank.get(j + k)) {
-            (x, y, _, _) if x < y => Ordering::Less,
-            (x, y, _, _) if x > y => Ordering::Greater,
-            (_, _, x, y) if x < y => Ordering::Less,
-            (_, _, x, y) if x > y => Ordering::Greater,
-            _ => Ordering::Equal,
-        }
+    fn key(i: usize, k: usize, rank: &Vec<usize>) -> (usize, Option<&usize>) {
+        (rank[i], rank.get(i + k))
+    }
+    fn eq(i: usize, j: usize, k: usize, rank: &Vec<usize>) -> bool {
+        key(i, k, rank) == key(j, k, rank)
     }
     let mut k = 1;
-    let mut swap_rank: Vec<usize> = (0..n).collect();
     while k < n {
-        sa.sort_by(|&i, &j| compare(i, j, k, &rank));
-        swap_rank[sa[0]] = 0;
+        let mut alt: Vec<usize> = (0..n).collect();
+        sa.sort_by_key(|&i| key(i, k, &rank));
+        alt[sa[0]] = 0;
         for i in 1..n {
-            swap_rank[sa[i]] = swap_rank[sa[i - 1]]
-                + if compare(sa[i], sa[i - 1], k, &rank) == Ordering::Equal {
-                    0
-                } else {
-                    1
-                };
+            alt[sa[i]] = alt[sa[i - 1]] + if eq(sa[i], sa[i - 1], k, &rank) { 0 } else { 1 };
         }
-        for i in 0..n {
-            rank[i] = swap_rank[i];
-        }
+        rank = alt;
         k *= 2;
     }
     sa

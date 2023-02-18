@@ -82,7 +82,7 @@ mod test_complex {
     }
     #[test]
     fn test_assign() {
-        let mut x = Complex(0, 0);
+        let mut x: Complex<i128> = Complex(0, 0);
         x += Complex(0, 1);
         x *= Complex(1, 1);
         x -= Complex(0, 1);

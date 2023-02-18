@@ -1,5 +1,5 @@
 /// Natural Numbers - Moebius Function
-pub fn moebius(n: usize) -> Vec<i64> {
+pub fn moebius(n: usize) -> Vec<i128> {
     let mut moe = vec![1; n];
     let mut prime = vec![true; n];
     moe[0] = 0;

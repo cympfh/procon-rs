@@ -47,6 +47,11 @@ impl Monoid for i64 {
         1
     }
 }
+impl Monoid for i128 {
+    fn one() -> Self {
+        1
+    }
+}
 impl Monoid for f64 {
     fn one() -> Self {
         1.0

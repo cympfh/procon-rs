@@ -24,25 +24,25 @@ impl RollingHash {
             pow,
         }
     }
-    pub fn unwrap(&self) -> i64 {
+    pub fn unwrap(&self) -> i128 {
         self.data.0
     }
-    pub fn push_back(&mut self, x: i64) {
+    pub fn push_back(&mut self, x: i128) {
         self.length += 1;
         self.pow = self.pow * self.base;
         self.data = self.data * self.base + mint!(x);
     }
-    pub fn push_front(&mut self, x: i64) {
+    pub fn push_front(&mut self, x: i128) {
         self.data = self.data + self.pow * mint!(x);
         self.length += 1;
         self.pow = self.pow * self.base;
     }
-    pub fn pop_back(&mut self, x: i64) {
+    pub fn pop_back(&mut self, x: i128) {
         self.length -= 1;
         self.pow = self.pow * self.baseinv;
         self.data = (self.data - mint!(x)) * self.baseinv;
     }
-    pub fn pop_front(&mut self, x: i64) {
+    pub fn pop_front(&mut self, x: i128) {
         self.length -= 1;
         self.pow = self.pow * self.baseinv;
         self.data = self.data - self.pow * mint!(x);

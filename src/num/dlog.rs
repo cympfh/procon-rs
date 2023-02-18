@@ -2,7 +2,7 @@
 use crate::algebra::modint::*;
 
 // Returns x; pow(a, x) == b
-pub fn dlog(a: ModInt, b: ModInt) -> i64 {
+pub fn dlog(a: ModInt, b: ModInt) -> i128 {
     let s = {
         let mut s = 1;
         while s * s <= a.1 {
@@ -35,13 +35,13 @@ mod test_dlog {
 
     #[test]
     fn it_works() {
-        const MOD: i64 = 1_000_000_007;
+        const MOD: i128 = 1_000_000_007;
         assert_eq!(dlog(ModInt(2, MOD), ModInt(1024, MOD)), 10);
     }
 
     #[test]
     fn under_modulo() {
-        const MOD: i64 = 107;
+        const MOD: i128 = 107;
         assert_eq!(dlog(ModInt(2, MOD), ModInt(2, MOD).pow(10)), 10);
     }
 }

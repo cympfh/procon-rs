@@ -33,7 +33,7 @@ mod test_cumbit {
     fn it_works() {
         let mut cbit = CumBIT::new(5);
         assert_veq!(cbit, vec![0, 0, 0, 0, 0]);
-        cbit.add(1..4, 2);
+        cbit.add(1..4, 2_i128);
         assert_veq!(cbit, vec![0, 2, 2, 2, 0]);
         cbit.add(0..5, 1);
         assert_veq!(cbit, vec![1, 3, 3, 3, 1]);

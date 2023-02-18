@@ -71,7 +71,7 @@ mod test_ffa {
     #[test]
     fn test_a() {
         let neigh = vec![
-            vec![(1, Real(1)), (3, Real(1)), (5, Real(1))],
+            vec![(1, Real(1_i64)), (3, Real(1)), (5, Real(1))],
             vec![(2, Real(1)), (4, Real(1))],
             vec![(6, Real(1))],
             vec![(2, Real(1))],
@@ -85,7 +85,7 @@ mod test_ffa {
     #[test]
     fn test_b() {
         let neigh = vec![
-            vec![(1, Real(3)), (2, Real(3))],
+            vec![(1, Real(3_i128)), (2, Real(3))],
             vec![(2, Real(2)), (3, Real(3))],
             vec![(4, Real(2))],
             vec![(4, Real(3)), (5, Real(2))],

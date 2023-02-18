@@ -60,7 +60,7 @@ mod test_bellman_ford {
 
     #[test]
     fn test_cycle_contains_negative_edge() {
-        let neigh = vec![
+        let neigh: Vec<Vec<(usize, i64)>> = vec![
             vec![(1, 1), (3, -1)],
             vec![(0, 1), (2, 1)],
             vec![(1, 1), (3, 1)],
@@ -74,7 +74,8 @@ mod test_bellman_ford {
 
     #[test]
     fn test_contains_negative_cycle() {
-        let neigh = vec![vec![(1, -1)], vec![(0, -1), (2, 1)], vec![(1, 1)]];
+        let neigh: Vec<Vec<(usize, i128)>> =
+            vec![vec![(1, -1)], vec![(0, -1), (2, 1)], vec![(1, 1)]];
         assert_eq!(bellman_ford(0, 1, &neigh), NegInf);
         assert_eq!(bellman_ford(0, 2, &neigh), NegInf);
     }

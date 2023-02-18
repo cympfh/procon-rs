@@ -1,5 +1,3 @@
-pub mod base;
-pub use base::{Nat, Num};
 pub mod binom_modint;
 pub mod binom_pascal;
 pub mod chinese_remainder_theorem;

@@ -1,9 +1,9 @@
-/// Algebra - Def of Monoid (i64, +)
+/// Algebra - Def of Monoid (i128, +)
 use crate::algebra::monoid::*;
 use crate::monoid; // IGNORE
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Sum(pub i64);
+pub struct Sum(pub i128);
 monoid! {
     Sum;
     one = Sum(0);

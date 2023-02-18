@@ -6,7 +6,6 @@ use crate::{agroup, monoid, ring}; // IGNORE
 
 #[derive(Debug, Clone, Copy)]
 pub struct Float(pub f64);
-
 impl Float {
     pub fn abs(&self) -> Self {
         Float(self.0.abs())
@@ -21,7 +20,6 @@ impl Float {
         Float(self.0.tan())
     }
 }
-
 agroup! {
     Float;
     zero = Float(0.0);
@@ -69,6 +67,7 @@ impl std::cmp::Ord for Float {
 
 #[cfg(test)]
 mod test_float {
+    use crate::algebra::group_additive::AGroup;
     use crate::num::float::Float;
     #[test]
     fn test_comparable() {
@@ -78,7 +77,6 @@ mod test_float {
     }
     #[test]
     fn test_equality() {
-        use crate::num::base::*;
         let x = Float(3.14);
         let y = Float(3.141);
         let z = Float(3.140000001);

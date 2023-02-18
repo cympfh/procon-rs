@@ -24,7 +24,7 @@ mod test_act_add {
     use crate::algebra::act_add::*;
     #[test]
     fn it_works() {
-        assert_eq!(Add(2).act(5), 7);
-        assert_eq!((Add(1) * Add(2)).act(5), 8);
+        assert_eq!(Add(2_i64).act(5), 7);
+        assert_eq!((Add(1_i64) * Add(2)).act(5), 8);
     }
 }

@@ -67,6 +67,11 @@ impl AGroup for i64 {
         0
     }
 }
+impl AGroup for i128 {
+    fn zero() -> Self {
+        0
+    }
+}
 impl AGroup for f64 {
     fn zero() -> Self {
         0.0

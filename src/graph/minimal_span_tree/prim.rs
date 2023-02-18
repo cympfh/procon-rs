@@ -50,17 +50,15 @@ mod test_prim {
 
     #[test]
     fn it_works() {
-        assert_eq!(
-            prim(&undirectize(&vec![
-                vec![(1, 7), (3, 5)],
-                vec![(2, 8), (3, 9), (4, 7)],
-                vec![(4, 5)],
-                vec![(4, 15), (5, 6)],
-                vec![(5, 8), (6, 9)],
-                vec![(6, 11)],
-                vec![],
-            ])),
-            39
-        );
+        let neigh: Vec<Vec<(usize, i64)>> = vec![
+            vec![(1, 7), (3, 5)],
+            vec![(2, 8), (3, 9), (4, 7)],
+            vec![(4, 5)],
+            vec![(4, 15), (5, 6)],
+            vec![(5, 8), (6, 9)],
+            vec![(6, 11)],
+            vec![],
+        ];
+        assert_eq!(prim(&undirectize(&neigh)), 39);
     }
 }

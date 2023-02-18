@@ -2,8 +2,8 @@
 use crate::algebra::modint::*;
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Binom {
-    n: u64,
-    k: u64,
+    n: u128,
+    k: u128,
     coeff: ModInt,
 }
 
@@ -13,7 +13,7 @@ impl Binom {
     }
 
     /// Calc Binom-Coeff with O(k)
-    pub fn new(n: u64, k: u64, modulo: i64) -> Self {
+    pub fn new(n: u128, k: u128, modulo: i128) -> Self {
         if k == 0 {
             let coeff = ModInt(1, modulo);
             Self { n, k, coeff }
@@ -27,15 +27,15 @@ impl Binom {
         } else {
             let mut c = ModInt(1, modulo);
             for i in 0..k {
-                c *= (n - i) as i64;
-                c /= (k - i) as i64;
+                c *= (n - i) as i128;
+                c /= (k - i) as i128;
             }
             Self { n, k, coeff: c }
         }
     }
 
     /// Calc `binom(n, k)` with a Hint
-    pub fn new_with_hint(n: u64, k: u64, hint: &Binom) -> Self {
+    pub fn new_with_hint(n: u128, k: u128, hint: &Binom) -> Self {
         if k == 0 {
             let coeff = ModInt(1, hint.unwrap().1);
             return Self { n, k, coeff };
@@ -48,22 +48,22 @@ impl Binom {
             return *hint;
         }
         let (n_next, k_next, c_next) = if n < hint.n && k < hint.k {
-            let c = hint.unwrap() * hint.k as i64 / hint.n as i64;
+            let c = hint.unwrap() * hint.k as i128 / hint.n as i128;
             (hint.n - 1, hint.k - 1, c)
         } else if n > hint.n && k > hint.k {
-            let c = hint.unwrap() * (hint.n + 1) as i64 / (hint.k + 1) as i64;
+            let c = hint.unwrap() * (hint.n + 1) as i128 / (hint.k + 1) as i128;
             (hint.n + 1, hint.k + 1, c)
         } else if n > hint.n {
-            let c = hint.unwrap() * (hint.n + 1) as i64 / (hint.n - hint.k + 1) as i64;
+            let c = hint.unwrap() * (hint.n + 1) as i128 / (hint.n - hint.k + 1) as i128;
             (hint.n + 1, hint.k, c)
         } else if n < hint.n {
-            let c = hint.unwrap() * (hint.n - hint.k) as i64 / hint.n as i64;
+            let c = hint.unwrap() * (hint.n - hint.k) as i128 / hint.n as i128;
             (hint.n - 1, hint.k, c)
         } else if k > hint.k {
-            let c = hint.unwrap() * (hint.n - hint.k) as i64 / (hint.k + 1) as i64;
+            let c = hint.unwrap() * (hint.n - hint.k) as i128 / (hint.k + 1) as i128;
             (hint.n, hint.k + 1, c)
         } else {
-            let c = hint.unwrap() * hint.k as i64 / (hint.n - hint.k + 1) as i64;
+            let c = hint.unwrap() * hint.k as i128 / (hint.n - hint.k + 1) as i128;
             (hint.n, hint.k - 1, c)
         };
         let nexthint = Binom {
@@ -81,7 +81,7 @@ mod test_binom_modint {
 
     #[test]
     fn it_works() {
-        const MOD: i64 = 1000000007;
+        const MOD: i128 = 1000000007;
         assert_eq!(Binom::new(5, 0, MOD).unwrap().unwrap(), 1);
         assert_eq!(Binom::new(5, 1, MOD).unwrap().unwrap(), 5);
         assert_eq!(Binom::new(5, 2, MOD).unwrap().unwrap(), 10);
@@ -92,13 +92,13 @@ mod test_binom_modint {
 
     #[test]
     fn large_numbers() {
-        const MOD: i64 = 107;
+        const MOD: i128 = 107;
         assert_eq!(Binom::new(100, 50, MOD).unwrap().unwrap(), 35);
     }
 
     #[test]
     fn test_with_hint() {
-        const MOD: i64 = 107;
+        const MOD: i128 = 107;
         let c = Binom::new(5, 2, MOD);
         assert_eq!(Binom::new_with_hint(4, 2, &c), Binom::new(4, 2, MOD));
         for n in 3..8 {
@@ -110,7 +110,7 @@ mod test_binom_modint {
 
     #[test]
     fn test_erroneous() {
-        const MOD: i64 = 107;
+        const MOD: i128 = 107;
         assert_eq!(
             Binom::new(0, 0, MOD),
             Binom {

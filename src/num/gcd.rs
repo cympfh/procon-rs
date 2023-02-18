@@ -1,7 +1,8 @@
 /// Number - GCD on Natural Numbers
-use crate::num::base::*;
-pub fn gcd<N: Nat>(a: N, b: N) -> N {
-    if b == N::zero() {
+pub fn gcd(a: i128, b: i128) -> i128 {
+    let a = a.abs();
+    let b = b.abs();
+    if b == 0 {
         a
     } else {
         gcd(b, a % b)
@@ -14,8 +15,10 @@ mod test_gcd {
 
     #[test]
     fn it_works() {
-        assert_eq!(gcd(10_usize, 15), 5);
-        assert_eq!(gcd(10_u64, 15), 5);
-        assert_eq!(gcd(10_u128, 15), 5);
+        assert_eq!(gcd(10, 15), 5);
+        assert_eq!(gcd(-10, 15), 5);
+        assert_eq!(gcd(10, -15), 5);
+        assert_eq!(gcd(-10, -15), 5);
+        assert_eq!(gcd(-5, 0), 5);
     }
 }

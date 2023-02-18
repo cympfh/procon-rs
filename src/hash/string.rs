@@ -8,7 +8,7 @@ pub struct StringHash {
     length: usize,
     sethash: ZobristHash,
     rolhash: RollingHash,
-    table: Vec<i64>, // char -> int
+    table: Vec<i128>, // char -> int
 }
 impl StringHash {
     pub fn new() -> Self {
@@ -16,10 +16,10 @@ impl StringHash {
         let sethash = ZobristHash::new();
         let rolhash = RollingHash::new();
         let mut rng = XorShift::new();
-        let table: Vec<i64> = (0..300)
+        let table: Vec<i128> = (0..300)
             .map(|_| {
                 let max = 1_000_000_007;
-                rng.gen::<i64>() % max
+                rng.gen::<i128>() % max
             })
             .collect();
         Self {

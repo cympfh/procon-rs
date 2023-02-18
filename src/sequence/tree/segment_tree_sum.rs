@@ -10,17 +10,17 @@ impl SegmentTreeSum {
         let t = SegmentTree::new(size);
         Self { t }
     }
-    pub fn from(xs: Vec<i64>) -> Self {
+    pub fn from(xs: Vec<i128>) -> Self {
         let t = SegmentTree::from(xs.iter().map(|&x| Sum(x)).collect());
         Self { t }
     }
-    pub fn to_vec(self) -> Vec<i64> {
+    pub fn to_vec(self) -> Vec<i128> {
         self.t.to_vec().iter().map(|sm| sm.0).collect()
     }
-    pub fn update(&mut self, i: usize, x: i64) {
+    pub fn update(&mut self, i: usize, x: i128) {
         self.t.update(i, Sum(x));
     }
-    pub fn product(&self, range: std::ops::Range<usize>) -> i64 {
+    pub fn product(&self, range: std::ops::Range<usize>) -> i128 {
         self.t.product(range).0
     }
 }

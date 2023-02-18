@@ -158,7 +158,7 @@ mod test_matrix {
     fn it_works() {
         use crate::algebra::matrix::*;
         {
-            let m = mat![0, -1; 1, 0];
+            let m: Matrix<i128> = mat![0, -1; 1, 0];
             assert_eq!(&m * &m, mat![-1, 0; 0, -1]);
             assert_eq!(m.pow(2), mat![-1, 0; 0, -1]);
             assert_eq!(m.powmod(2, 10), mat![-1, 0; 0, -1]);

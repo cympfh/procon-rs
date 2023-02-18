@@ -1,4 +1,4 @@
-/// i128umber - Extended GCD on Integers
+/// Number - Extended GCD on Integers
 /// Solve of a*x + b*y = gcd(x, y)
 /// - Args: x, y
 /// - Returns: (a, b, gcd(x, y))

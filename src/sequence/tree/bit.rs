@@ -12,6 +12,14 @@ impl<X: Copy + AGroup> BIT<X> {
             array: vec![X::zero(); size + 1],
         }
     }
+    pub fn from(xs: &Vec<X>) -> Self {
+        let n = xs.len();
+        let mut r = Self::new(n);
+        for i in 0..n {
+            r.add(i, xs[i]);
+        }
+        r
+    }
     pub fn add(&mut self, idx: usize, w: X) {
         let mut x = idx + 1;
         while x <= self.size {

@@ -1,28 +1,31 @@
 /// Algorithm - Binary Search (lowerbound)
-pub trait CompleteIdx: Copy {
+pub trait Complete: Copy + PartialEq + PartialOrd {
     fn mid(self, other: Self) -> Self;
 }
 #[macro_export]
-macro_rules! completeidx {
+macro_rules! complete {
     ( $type:ty, mid($self:ident, $other:ident) = $code:block ) => {
-        impl CompleteIdx for $type {
+        impl Complete for $type {
             fn mid($self, $other: Self) -> Self { $code }
         }
     };
 }
-completeidx! { usize, mid(self, other) = { (self + other) / 2 }}
-completeidx! { u128, mid(self, other) = { (self + other) / 2 }}
-completeidx! { i128, mid(self, other) = { (self + other) / 2 }}
-completeidx! { u64, mid(self, other) = { (self + other) / 2 }}
-completeidx! { i64, mid(self, other) = { (self + other) / 2 }}
-completeidx! { f64, mid(self, other) = { (self + other) / 2.0 }}
+complete! { usize, mid(self, other) = { (self + other) / 2 }}
+complete! { u128, mid(self, other) = { (self + other) / 2 }}
+complete! { i128, mid(self, other) = { (self + other) / 2 }}
+complete! { u64, mid(self, other) = { (self + other) / 2 }}
+complete! { i64, mid(self, other) = { (self + other) / 2 }}
+complete! { f64, mid(self, other) = { (self + other) / 2.0 }}
 
-pub fn lowerbound<T: CompleteIdx>(r: std::ops::Range<T>, cond: &dyn Fn(T) -> bool) -> Option<T> {
+/// Find a lowerbound for the condition
+/// the condition has monotone: false -> true
+pub fn lowerbound<T: Complete>(r: std::ops::Range<T>, cond: &dyn Fn(T) -> bool) -> Option<T> {
+    if r.is_empty() {
+        return None;
+    }
     if cond(r.start) {
         return Some(r.start);
     }
-    // TODO(from 1.47.0)
-    // if r.is_empty() { return None }
     let mut left = r.start;
     let mut right = r.end;
     let mut ok = false;
@@ -59,5 +62,11 @@ mod test_binary_search {
     fn search_on_real_number() {
         let x: f64 = lowerbound(0.0..2.0, &|x| x * x >= 2.0).unwrap();
         assert!((x * x - 2.0).abs() < 0.00001);
+    }
+
+    #[test]
+    fn search_on_empty() {
+        assert_eq!(lowerbound(0_i64..0, &|i| i < 0 || i >= 0), None);
+        assert_eq!(lowerbound(1.0..-1.0_f64, &|x| x * x >= 0.0), None);
     }
 }

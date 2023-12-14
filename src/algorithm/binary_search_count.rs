@@ -1,7 +1,7 @@
 use crate::algorithm::binary_search::*;
 
 /// num of elements in the range
-pub fn count<X: CompleteIdx + Ord>(xs: &Vec<X>, range: std::ops::Range<X>) -> usize {
+pub fn count<X: Complete>(xs: &Vec<X>, range: std::ops::Range<X>) -> usize {
     let n = xs.len();
     if n == 0 {
         return 0;

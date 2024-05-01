@@ -8,3 +8,4 @@ pub mod rmq;
 pub mod segment_tree;
 pub mod segment_tree_prod;
 pub mod segment_tree_sum;
+pub mod sparse_table;

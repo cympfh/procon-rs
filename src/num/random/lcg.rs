@@ -1,8 +1,8 @@
 /// Random Number - Linear Congruential Generators
 use crate::num::random::fromu64::*;
 
-pub struct Rand(u64, u64, u64, u64);
-impl Rand {
+pub struct LCG(u64, u64, u64, u64);
+impl LCG {
     pub fn new() -> Self {
         Self(127, 48271, 0, 1 << 31 - 1) // Park & Miller
     }
@@ -21,7 +21,7 @@ mod test_lcg {
 
     #[test]
     fn it_works() {
-        let mut rand = Rand::new();
+        let mut rand = LCG::new();
         let _: bool = rand.gen();
         let _: usize = rand.gen();
         let _: i32 = rand.gen();

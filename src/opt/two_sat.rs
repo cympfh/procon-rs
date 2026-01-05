@@ -58,7 +58,7 @@ impl std::ops::AddAssign<TwoSATLogic> for TwoSAT {
 }
 
 #[macro_export]
-macro_rules! and {
+macro_rules! clause2 {
     (not $i:tt or not $j:tt) => {
         TwoSATLogic::Or(TwoSATTerm($i, false), TwoSATTerm($j, false))
     };
@@ -105,72 +105,72 @@ macro_rules! and {
 
 #[cfg(test)]
 mod test_two_sat {
-    use crate::misc::two_sat::*;
+    use crate::opt::two_sat::*;
 
     #[test]
     fn test_two_sat_1() {
         let mut sat = TwoSAT::new(3);
-        sat += and!(0 => 1);
-        sat += and!(1 => 2);
-        sat += and!(2 => 0);
+        sat += clause2!(0 => 1);
+        sat += clause2!(1 => 2);
+        sat += clause2!(2 => 0);
         assert!(sat.solve());
     }
     #[test]
     fn test_two_sat_2() {
         let mut sat = TwoSAT::new(2);
-        sat += and!(0 or 1);
-        sat += and!(0 => not 1);
-        sat += and!(1 => not 0);
+        sat += clause2!(0 or 1);
+        sat += clause2!(0 => not 1);
+        sat += clause2!(1 => not 0);
         assert!(sat.solve());
     }
     #[test]
     fn test_two_sat_3() {
         let mut sat = TwoSAT::new(2);
-        sat += and!(0 or 1);
-        sat += and!(not 0 or 1);
-        sat += and!(0 or not 1);
-        sat += and!(not 1 or not 0);
+        sat += clause2!(0 or 1);
+        sat += clause2!(not 0 or 1);
+        sat += clause2!(0 or not 1);
+        sat += clause2!(not 1 or not 0);
         assert!(!sat.solve());
     }
     #[test]
     fn test_two_sat_4() {
         let mut sat = TwoSAT::new(2);
-        sat += and!(0 => 1);
-        sat += and!(1 => 0);
-        sat += and!(0 or 1);
-        sat += and!(not 0 or not 1);
+        sat += clause2!(0 => 1);
+        sat += clause2!(1 => 0);
+        sat += clause2!(0 or 1);
+        sat += clause2!(not 0 or not 1);
         assert!(!sat.solve());
     }
     #[test]
     fn test_two_sat_5() {
         let mut sat = TwoSAT::new(2);
-        sat += and!(0);
-        sat += and!(1);
+        sat += clause2!(0);
+        sat += clause2!(1);
         assert!(sat.solve());
     }
     #[test]
     fn test_two_sat_6() {
         let mut sat = TwoSAT::new(2);
-        sat += and!(0);
-        sat += and!(not 0);
+        sat += clause2!(0);
+        sat += clause2!(not 0);
         assert!(!sat.solve());
     }
 
     #[test]
     fn test_iff_1() {
         let mut sat = TwoSAT::new(3);
-        sat += and!(0 <=> 1);
-        sat += and!(not 1 <=> not 2);
-        sat += and!(2 <=> 0);
+        sat += clause2!(0 <=> 1);
+        sat += clause2!(not 1 <=> not 2);
+        sat += clause2!(2 <=> 0);
         assert!(sat.solve());
     }
 
     #[test]
     fn test_iff_2() {
         let mut sat = TwoSAT::new(3);
-        sat += and!(0 <=> 1);
-        sat += and!(not 1 <=> 2);
-        sat += and!(2 <=> 0);
+        sat += clause2!(0 <=> 1);
+        sat += clause2!(not 1 <=> 2);
+        sat += clause2!(2 <=> 0);
         assert!(!sat.solve());
     }
 }

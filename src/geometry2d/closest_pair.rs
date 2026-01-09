@@ -1,5 +1,4 @@
 /// Geometry2D - 最近点対 (Closest Pair of Points)
-/// 分割統治法による O(n log² n) の実装
 use crate::geometry2d::point::*;
 
 pub fn closest_pair(ps: &Vec<Point>) -> (Point, Point) {

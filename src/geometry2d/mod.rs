@@ -1,6 +1,7 @@
 pub mod ccw_line;
 pub mod ccw_linesegment;
 pub mod circle;
+pub mod circle_intersection;
 pub mod closest_pair;
 pub mod int;
 pub mod line;

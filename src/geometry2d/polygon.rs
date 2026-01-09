@@ -1,6 +1,6 @@
-use crate::geometry2d::ccw::*;
-use crate::geometry2d::line::*;
 /// Geometry2D - Definition of Polygon
+use crate::geometry2d::ccw_linesegment::*;
+use crate::geometry2d::line::*;
 use crate::geometry2d::point::*;
 
 #[derive(Debug, Clone)]
@@ -20,13 +20,13 @@ impl Polygon {
             let u = self.0[i];
             let v = self.0[(i + 1) % n];
             let edge = LineSegment(u, v);
-            match ccw(edge, *p) {
-                CCW::On => {
+            match ccw_linesegment(edge, *p) {
+                CCWLineSegment::Onsegment => {
                     if is_strict {
                         return false;
                     }
                 }
-                CCW::Left => continue,
+                CCWLineSegment::Left => continue,
                 _ => return false,
             }
         }
